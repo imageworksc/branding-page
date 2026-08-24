@@ -2880,199 +2880,208 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 
 /* --------------------------------------------------------------------------
-   BRAND KIT
-   The argument of the section beside it, drawn: one mark, and the system it
-   belongs to. Built from the page's own tokens rather than a stock photo of
-   a desk — the palette on screen is the palette in the CSS.
+   IDENTITY PLATE — the hero visual
+   A page out of a brand manual: the mark inside its clear-space rule, the
+   variants it ships in, the typeface, and the palette. One surface divided by
+   hairlines, not a stack of cards — the same editorial move the section below
+   makes when it sets the definition against a single rule.
    -------------------------------------------------------------------------- */
-.bd-kit {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
-  /* equal rows against a stated height: the three panels then read as one
-     object beside the list rather than three cards floating in the band */
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 18px;
+.bd-plate {
+  margin: 0;
   width: 100%;
-  min-height: clamp(400px, 34vw, 500px);
-}
-.bd-kit__panel {
-  position: relative;
-  overflow: hidden;
   border-radius: var(--r);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
   box-shadow: var(--shadow-card);
-  transition: transform .4s var(--ease), box-shadow .4s var(--ease);
-}
-/* the same rule that wipes across the tiles and the CMS rows */
-.bd-kit__panel::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  inset-inline: 0;
-  block-size: 3px;
-  background: var(--green);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform .45s var(--ease);
-}
-.bd-kit__panel:hover::before { transform: scaleX(1); }
-.bd-kit__panel:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 1px 3px rgba(20, 40, 80, .07), 0 20px 44px rgba(20, 40, 80, .14);
+  overflow: hidden;
 }
 
-.bd-kit__label {
-  font-size: 10.5px;
+/* ---- the manual's running head ---- */
+.bd-plate__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: .16em;
+  letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--faint);
 }
+.bd-plate__head b { color: var(--navy); font-weight: 800; }
 
-/* ---- the stationery sheet: the mark in the place it actually gets used ---- */
-.bd-kit__sheet {
-  grid-row: span 2;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  padding: 26px 24px 28px;
+/* ---- the mark, on a field, beside the variants rail ---- */
+.bd-plate__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 78px;
+  border-bottom: 1px solid var(--border);
 }
-.bd-kit__lockup { display: flex; align-items: center; gap: 12px; }
-.bd-kit__mark {
+
+.bd-plate__field {
+  position: relative;
   display: grid;
   place-items: center;
-  inline-size: 46px;
-  block-size: 46px;
+  min-block-size: 186px;
+  padding: 34px 30px;
+  /* the manual's measuring grid, faint enough to read as paper */
+  background-image:
+    linear-gradient(to right, rgba(20, 60, 102, .05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 60, 102, .05) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* The clear-space rule drawn around the lockup — the detail that says this is
+   a system with rules and not a logo someone exported once. It hugs the mark
+   rather than the panel, because clear space is measured off the mark. */
+.bd-plate__guide {
+  position: absolute;
+  inset: -26px -30px;
+  border: 1px dashed rgba(18, 102, 181, .34);
+  border-radius: 1px;
+  pointer-events: none;
+}
+.bd-plate__guide::before,
+.bd-plate__guide::after {
+  content: '';
+  position: absolute;
+  inline-size: 9px;
+  block-size: 9px;
+  border: 0 solid var(--blue);
+}
+.bd-plate__guide::before {
+  top: -1px; left: -1px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+.bd-plate__guide::after {
+  right: -1px; bottom: -1px;
+  border-right-width: 2px;
+  border-bottom-width: 2px;
+}
+
+.bd-plate__lockup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.bd-plate__glyph {
+  display: grid;
+  place-items: center;
+  inline-size: 52px;
+  block-size: 52px;
   flex: none;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--blue), var(--navy));
   color: #fff;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 800;
   letter-spacing: .02em;
 }
-.bd-kit__wordmark { display: flex; flex-direction: column; gap: 5px; }
-.bd-kit__wordmark b {
-  font-size: 15px;
+.bd-plate__word { display: flex; flex-direction: column; gap: 5px; }
+.bd-plate__word b {
+  font-size: 19px;
   font-weight: 800;
-  letter-spacing: -.02em;
+  letter-spacing: -.025em;
+  line-height: 1;
   color: var(--navy);
-  line-height: 1;
 }
-.bd-kit__wordmark span {
-  font-size: 9.5px;
+.bd-plate__word span {
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: .18em;
+  letter-spacing: .22em;
   text-transform: uppercase;
-  color: var(--green-ink);
   line-height: 1;
+  color: var(--green-ink);
 }
-.bd-kit__rule { display: block; block-size: 2px; inline-size: 42px; background: var(--green); }
 
-/* The three lock-ups every identity actually ships with, at the size they get
-   used: full, icon only, and one-colour. */
-.bd-kit__variants { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
-.bd-kit__variants span {
+/* ---- the rail: the three lock-ups the identity actually ships with ---- */
+.bd-plate__variants {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: 20px 0;
+  border-left: 1px solid var(--border);
+}
+.bd-plate__variants li {
   display: grid;
   place-items: center;
-  inline-size: 30px;
-  block-size: 30px;
+  inline-size: 34px;
+  block-size: 34px;
+  margin-inline: auto;
   border-radius: 50%;
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 800;
   letter-spacing: .02em;
 }
-.bd-kit__variants span:nth-child(1) { background: var(--navy); color: #fff; }
-.bd-kit__variants span:nth-child(2) { background: var(--green); color: #14300a; }
-.bd-kit__variants span:nth-child(3) { background: transparent; color: var(--navy); box-shadow: inset 0 0 0 1.5px var(--border); }
-
-/* The body of the letter. It fills the sheet rather than leaving it half
-   empty — an identity is judged on the page it is actually printed on. */
-.bd-kit__lines { display: flex; flex-direction: column; justify-content: center; gap: 10px; flex: 1; margin-top: 4px; }
-.bd-kit__lines i {
-  display: block;
-  block-size: 7px;
-  border-radius: 4px;
-  background: var(--border);
-}
-.bd-kit__lines i:nth-child(2) { inline-size: 92%; }
-.bd-kit__lines i:nth-child(3) { inline-size: 78%; }
-.bd-kit__lines i:nth-child(4) { inline-size: 88%; }
-.bd-kit__lines i:nth-child(5) { inline-size: 64%; }
-.bd-kit__lines i:nth-child(6) { inline-size: 84%; }
-.bd-kit__lines i:nth-child(7) { inline-size: 44%; background: var(--chip-blue); }
-
-.bd-kit__foot {
-  display: flex;
-  gap: 8px;
-  margin-top: 4px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border-soft);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
+.bd-plate__variants li:nth-child(1) { background: var(--navy); color: #fff; }
+.bd-plate__variants li:nth-child(2) { background: var(--green); color: #14300a; }
+.bd-plate__variants li:nth-child(3) { color: var(--navy); box-shadow: inset 0 0 0 1.5px var(--border); }
 
 /* ---- the specimen ---- */
-.bd-kit__type {
+.bd-plate__type {
   display: flex;
   align-items: center;
-  align-content: center;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-  padding: 22px 24px;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
 }
-.bd-kit__aa {
-  font-size: 52px;
+.bd-plate__aa {
+  font-size: 40px;
   font-weight: 800;
   letter-spacing: -.05em;
-  line-height: .9;
+  line-height: .85;
   color: var(--navy);
 }
-.bd-kit__type div { display: flex; flex-direction: column; gap: 6px; }
-.bd-kit__type p {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink);
-}
-.bd-kit__weights { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 11px; color: var(--faint); }
-.bd-kit__weights span:nth-child(1) { font-weight: 300; }
-.bd-kit__weights span:nth-child(2) { font-weight: 500; }
-.bd-kit__weights span:nth-child(3) { font-weight: 800; }
-
-/* ---- the palette ---- */
-.bd-kit__palette { display: flex; flex-direction: column; padding: 22px 24px 24px; }
-.bd-kit__swatches { display: flex; gap: 8px; flex: 1; min-block-size: 58px; margin-top: 14px; }
-.bd-kit__swatches li {
-  flex: 1;
-  border-radius: var(--r);
-  background: var(--c);
-  box-shadow: inset 0 0 0 1px rgba(20, 40, 80, .08);
-}
-.bd-kit__hex {
+.bd-plate__type div { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.bd-plate__type p { font-size: 13px; font-weight: 700; color: var(--ink); }
+.bd-plate__weights {
   display: flex;
-  gap: 8px;
-  margin-top: 9px;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: .06em;
+  flex-wrap: wrap;
+  gap: 3px 10px;
+  font-size: 11px;
   color: var(--faint);
 }
-.bd-kit__hex span { flex: 1; }
+.bd-plate__weights span:nth-child(1) { font-weight: 300; }
+.bd-plate__weights span:nth-child(2) { font-weight: 500; }
+.bd-plate__weights span:nth-child(3) { font-weight: 800; }
 
-@media (max-width: 1024px) {
-  /* Stacked, the panels no longer share a height with anything, so the stated
-     minimum would only stretch each one around a little content. */
-  .bd-kit {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    min-height: 0;
-  }
-  .bd-kit__sheet { grid-row: auto; }
-  .bd-kit__lines { flex: none; }
-  .bd-kit__swatches { flex: none; block-size: 58px; }
+/* ---- the palette, run to the edges: the one place on the plate where the
+       colour is the subject rather than the frame ---- */
+.bd-plate__palette { display: grid; grid-template-columns: repeat(4, 1fr); }
+.bd-plate__palette li {
+  display: flex;
+  align-items: flex-end;
+  min-block-size: 74px;
+  padding: 9px 10px;
+  background: var(--c);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  color: rgba(255, 255, 255, .82);
+}
+/* the surface tone is too pale to carry white type */
+.bd-plate__palette li.is-light { color: var(--faint); box-shadow: inset 1px 0 0 var(--border); }
+
+/* The plate joins the hero's staged entrance, landing after the buttons. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-hero-anim="on"] .bd-plate { animation: hero-in .8s var(--ease) .5s backwards; }
+}
+
+@media (max-width: 1120px) and (min-width: 901px) {
+  .bd-plate__field { min-block-size: 156px; }
+  .bd-plate__stage { grid-template-columns: minmax(0, 1fr) 66px; }
+}
+
+@media (max-width: 520px) {
+  .bd-plate__stage { grid-template-columns: minmax(0, 1fr) 62px; }
+  .bd-plate__field { min-block-size: 160px; padding: 28px 20px; }
+  .bd-plate__glyph { inline-size: 44px; block-size: 44px; font-size: 15px; }
+  .bd-plate__word b { font-size: 16px; }
+  .bd-plate__aa { font-size: 34px; }
+  .bd-plate__palette li { min-block-size: 62px; }
 }
 
 /* --------------------------------------------------------------------------
@@ -3088,9 +3097,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   align-items: center;
   width: 100%;
 }
-/* The kit is a fixed object beside a headline, so it takes its own height
-   rather than the one the section-level rule states. */
-.bd-hero .bd-kit { min-height: clamp(360px, 30vw, 430px); }
+/* The plate sizes itself from its own rows; nothing here forces a height. */
 
 @media (max-width: 900px) {
   .bd-hero { grid-template-columns: 1fr; }
@@ -3425,47 +3432,49 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
         </div>
       </div>
 
-      <!-- The hero visual the page already carried: a mark, and the system it
-           belongs to. Every colour in it is a token from this stylesheet. -->
-      <div class="bd-kit" aria-hidden="true">
-        <div class="bd-kit__panel bd-kit__sheet">
-          <p class="bd-kit__label">Identity</p>
-          <div class="bd-kit__lockup">
-            <span class="bd-kit__mark">IW</span>
-            <span class="bd-kit__wordmark">
-              <b>ImageWorks</b>
-              <span>Creative</span>
-            </span>
+      <!-- The hero visual the page already carried, redrawn as a page out of a
+           brand manual: the mark inside its clear-space rule, the lock-ups it
+           ships in, the typeface, and the palette. One surface divided by
+           hairlines. Every colour in it is a token from this stylesheet. -->
+      <figure class="bd-plate" aria-hidden="true">
+        <figcaption class="bd-plate__head">
+          <span><b>ImageWorks</b> Creative</span>
+          <span>Identity System</span>
+        </figcaption>
+
+        <div class="bd-plate__stage">
+          <div class="bd-plate__field">
+            <div class="bd-plate__lockup">
+              <span class="bd-plate__guide"></span>
+              <span class="bd-plate__glyph">IW</span>
+              <span class="bd-plate__word">
+                <b>ImageWorks</b>
+                <span>Creative</span>
+              </span>
+            </div>
           </div>
-          <span class="bd-kit__rule"></span>
-          <div class="bd-kit__variants">
-            <span>IW</span><span>IW</span><span>IW</span>
-          </div>
-          <div class="bd-kit__lines">
-            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-          </div>
-          <p class="bd-kit__foot"><span>Ashburn, VA</span><span>·</span><span>St. Petersburg, FL</span></p>
+          <ul class="bd-plate__variants">
+            <li>IW</li>
+            <li>IW</li>
+            <li>IW</li>
+          </ul>
         </div>
 
-        <div class="bd-kit__panel bd-kit__type">
-          <span class="bd-kit__aa">Aa</span>
+        <div class="bd-plate__type">
+          <span class="bd-plate__aa">Aa</span>
           <div>
             <p>Plus Jakarta Sans</p>
-            <span class="bd-kit__weights"><span>Light</span><span>Medium</span><span>Extrabold</span></span>
+            <span class="bd-plate__weights"><span>Light</span><span>Medium</span><span>Extrabold</span></span>
           </div>
         </div>
 
-        <div class="bd-kit__panel bd-kit__palette">
-          <p class="bd-kit__label">Palette</p>
-          <ul class="bd-kit__swatches">
-            <li style="--c:#143c66"></li>
-            <li style="--c:#1266b5"></li>
-            <li style="--c:#80c34a"></li>
-            <li style="--c:#f2f5f9"></li>
-          </ul>
-          <p class="bd-kit__hex"><span>143C66</span><span>1266B5</span><span>80C34A</span><span>F2F5F9</span></p>
-        </div>
-      </div>
+        <ul class="bd-plate__palette">
+          <li style="--c:#143c66">143C66</li>
+          <li style="--c:#1266b5">1266B5</li>
+          <li style="--c:#80c34a">80C34A</li>
+          <li class="is-light" style="--c:#f2f5f9">F2F5F9</li>
+        </ul>
+      </figure>
     </div>
   </section>
 
