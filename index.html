@@ -3206,20 +3206,170 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 
 /* --------------------------------------------------------------------------
-   THE ANSWER'S SECOND BEAT
-   "It's bigger than a logo" is the turn in the definition, so it sits under a
-   rule rather than running on as a second paragraph.
+   THE PLATE, UNDER THE CURSOR
+   Each band of the plate answers on its own, because each is a different kind
+   of thing to look at. The gestures are the ones the rest of the page already
+   uses — a green rule wiping in from the left, a tinted row, a lift — so the
+   plate behaves like the cards and rows further down rather than inventing a
+   vocabulary for itself.
    -------------------------------------------------------------------------- */
-.bd-answer-note {
-  max-width: 52ch;
-  margin-top: 8px;
-  padding-top: 24px;
+
+/* ---- the running head: the rule wipes in, the right label steps in ---- */
+.bd-plate__head { position: relative; transition: color .35s var(--ease); }
+.bd-plate__head::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  block-size: 2px;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .45s var(--ease);
+}
+.bd-plate__head:hover::after { transform: scaleX(1); }
+.bd-plate__head span:last-child { transition: transform .35s var(--ease), color .35s var(--ease); }
+.bd-plate__head:hover span:last-child { transform: translateX(-4px); color: var(--navy); }
+
+/* ---- the field: the measuring grid comes up, the clear space opens out,
+        and the mark lifts off the paper it is being set on ---- */
+.bd-plate__field::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(20, 60, 102, .07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 60, 102, .07) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0;
+  transition: opacity .45s var(--ease);
+  pointer-events: none;
+}
+.bd-plate__field:hover::before { opacity: 1; }
+
+.bd-plate__guide { transition: inset .45s var(--ease), opacity .45s var(--ease); }
+.bd-plate__field:hover .bd-plate__guide { inset: -32px -38px; }
+.bd-plate__lockup { transition: transform .45s var(--ease); }
+.bd-plate__field:hover .bd-plate__lockup { transform: translateY(-3px); }
+
+/* ---- the rail: the cycle holds while you are reading it, and whichever one
+        you point at takes the ring instead ---- */
+/* the auto cycle is dropped outright rather than paused: a paused ring stays
+   lit on whichever one it caught, and two rings at once reads as a fault */
+.bd-plate__variants:hover li::after { animation: none; }
+.bd-plate__variants li { transition: transform .3s var(--ease); }
+.bd-plate__variants li:hover { transform: scale(1.12); }
+.bd-plate__variants li::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px rgba(128, 195, 74, .6);
+  opacity: 0;
+  transform: scale(.88);
+  transition: opacity .3s var(--ease), transform .3s var(--ease);
+}
+.bd-plate__variants li:hover::before { opacity: 1; transform: scale(1); }
+
+/* ---- the specimen: the axis holds where you caught it, the row tints the
+        way the service rows do, and the face steps up ---- */
+.bd-plate__type { position: relative; transition: background-color .35s var(--ease); }
+.bd-plate__type:hover { background: var(--tint-blue); }
+.bd-plate__type:hover .bd-plate__aa { animation-play-state: paused; }
+.bd-plate__aa { transform-origin: left center; transition: transform .4s var(--ease); }
+.bd-plate__type:hover .bd-plate__aa { transform: scale(1.08); }
+.bd-plate__weights span { transition: color .35s var(--ease); }
+.bd-plate__type:hover .bd-plate__weights span { color: var(--navy); }
+
+/* ---- the palette: the cell you point at takes the room, the way a swatch
+        gets pulled out of a chip book to be looked at ---- */
+.bd-plate__palette { transition: grid-template-columns .5s var(--ease); }
+.bd-plate__palette li { transition: color .35s var(--ease); }
+.bd-plate__palette:hover li { color: rgba(255, 255, 255, .55); }
+.bd-plate__palette li:hover { color: #fff; }
+.bd-plate__palette:hover li.is-light { color: #b3bfcd; }
+.bd-plate__palette li.is-light:hover { color: var(--navy); }
+.bd-plate__palette:has(li:nth-child(1):hover) { grid-template-columns: 1.9fr 1fr 1fr 1fr; }
+.bd-plate__palette:has(li:nth-child(2):hover) { grid-template-columns: 1fr 1.9fr 1fr 1fr; }
+.bd-plate__palette:has(li:nth-child(3):hover) { grid-template-columns: 1fr 1fr 1.9fr 1fr; }
+.bd-plate__palette:has(li:nth-child(4):hover) { grid-template-columns: 1fr 1fr 1fr 1.9fr; }
+
+/* Nothing above needs motion to make sense — the tints, the rings and the
+   widths all still read. Only the travel is dropped. */
+@media (prefers-reduced-motion: reduce) {
+  .bd-plate__head::after,
+  .bd-plate__guide,
+  .bd-plate__lockup,
+  .bd-plate__aa,
+  .bd-plate__palette,
+  .bd-plate__variants li { transition: none; }
+  .bd-plate__field:hover .bd-plate__lockup,
+  .bd-plate__variants li:hover { transform: none; }
+}
+
+/* --------------------------------------------------------------------------
+   THE ANSWER
+   The definition names the five things a brand is made of, so the section is
+   built on that list rather than on a heading and a paragraph: the sentence is
+   set at display size and each of the five is struck through with the marker
+   the page already uses, one after the next, the first time the section is
+   read. It is the one place the copy enumerates anything, and it was being
+   thrown away as running text.
+   -------------------------------------------------------------------------- */
+.bd-answer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(24px, 2.6vw, 34px);
+}
+.bd-answer .sec-title { max-width: none; }
+
+.bd-answer__def {
+  font-size: clamp(20px, 1.5vw + 13px, 30px);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -.02em;
+  color: var(--navy);
+  max-width: 30ch;
+  text-wrap: pretty;
+  padding-left: clamp(20px, 2.4vw, 32px);
+  border-left: 3px solid var(--green);
+}
+
+/* The turn sits under a rule, on the reading measure rather than the display
+   one, so the two are plainly a statement and its qualification. */
+.bd-answer__turn {
+  max-width: var(--measure);
+  padding-top: clamp(22px, 2.4vw, 30px);
   border-top: 1px solid var(--border);
   font-size: var(--step-1);
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--muted);
 }
-.bd-answer-note strong { color: var(--navy); font-weight: 700; }
+.bd-answer__turn strong { color: var(--navy); font-weight: 800; }
+
+@media (min-width: 900px) {
+  /* Side by side above 900px: the claim on the left at display size, its
+     qualification on the right at reading size, with the rule between them
+     doing the work the horizontal one does when they stack. */
+  .bd-answer {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    grid-template-rows: auto auto;
+    column-gap: clamp(40px, 5vw, 76px);
+    row-gap: clamp(24px, 2.6vw, 34px);
+    align-items: start;
+  }
+  .bd-answer .sec-title { grid-column: 1 / -1; }
+  .bd-answer__def { max-width: none; }
+  .bd-answer__turn {
+    max-width: 46ch;
+    padding-top: 0;
+    padding-left: clamp(28px, 3vw, 44px);
+    border-top: 0;
+    border-left: 1px solid var(--border);
+    align-self: stretch;
+  }
+}
 
 /* --------------------------------------------------------------------------
    TRUST
@@ -3582,15 +3732,15 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
   <!-- 2 · AI OVERVIEW / AEO ANSWER --------------------------------------- -->
   <section class="band band--tint" aria-labelledby="what-is-branding">
-    <div class="wrap stmt reveal">
-      <div class="stmt-head">
-        <h2 class="stmt-title" id="what-is-branding">What Is Branding?</h2>
-      </div>
+    <div class="wrap bd-answer reveal">
+      <h2 class="sec-title" id="what-is-branding">What Is Branding?</h2>
 
-      <div class="stmt-body">
-        <p class="stmt-lead">Branding is the complete system of how a business looks, sounds, and is remembered — its logo, colors, typography, voice, and the promise those elements make to a customer every time they show up.</p>
-        <p class="bd-answer-note"><strong>It's bigger than a logo.</strong> A logo is one visual mark. Branding is the consistent identity that mark belongs to — applied across your website, print materials, social presence, and every other place your business shows up.</p>
-      </div>
+      <!-- The five marks strike through in order, .24s apart, the first time
+           the section is read. Not a word of the sentence is changed; the
+           list it already contains is simply allowed to be a list. -->
+      <p class="bd-answer__def">Branding is the complete system of how a business looks, sounds, and is remembered — its <span class="hl" style="--i:0">logo</span>, <span class="hl" style="--i:1">colors</span>, <span class="hl" style="--i:2">typography</span>, <span class="hl" style="--i:3">voice</span>, and the <span class="hl" style="--i:4">promise</span> those elements make to a customer every time they show up.</p>
+
+      <p class="bd-answer__turn"><strong>It's bigger than a logo.</strong> A logo is one visual mark. Branding is the consistent identity that mark belongs to — applied across your website, print materials, social presence, and every other place your business shows up.</p>
     </div>
   </section>
 
