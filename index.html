@@ -3323,16 +3323,23 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 .bd-answer .sec-title { max-width: none; }
 
+/* Built on the same recipe as the founding-year card in the trust section:
+   the card gradient, the 2px corner, the layered shadow and the 3px blue rule
+   across the top. The definition is the page's other stated fact, so it is
+   presented as one. */
 .bd-answer__def {
-  font-size: clamp(20px, 1.5vw + 13px, 30px);
+  padding: clamp(26px, 3vw, 38px);
+  border-radius: var(--r);
+  border-top: 3px solid var(--blue);
+  background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
+  box-shadow: var(--shadow-card);
+  font-size: clamp(19px, 1.3vw + 13px, 27px);
   font-weight: 600;
   line-height: 1.5;
   letter-spacing: -.02em;
   color: var(--navy);
-  max-width: 30ch;
+  max-width: 34ch;
   text-wrap: pretty;
-  padding-left: clamp(20px, 2.4vw, 32px);
-  border-left: 3px solid var(--green);
 }
 
 /* The turn sits under a rule, on the reading measure rather than the display
@@ -3361,13 +3368,13 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   }
   .bd-answer .sec-title { grid-column: 1 / -1; }
   .bd-answer__def { max-width: none; }
+  /* No rule between them up here: the card has an edge of its own, and a
+     hairline beside it would read as a second one. The top padding sets the
+     qualification's first line against the definition's. */
   .bd-answer__turn {
     max-width: 46ch;
-    padding-top: 0;
-    padding-left: clamp(28px, 3vw, 44px);
+    padding-top: clamp(22px, 2.4vw, 32px);
     border-top: 0;
-    border-left: 1px solid var(--border);
-    align-self: stretch;
   }
 }
 
