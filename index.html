@@ -3085,14 +3085,21 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    Each one is the plate demonstrating itself — the clear space being measured,
    the lock-ups being cycled, the weight axis being run, the colour catching
    light. Nothing here moves for the sake of moving.
+
+   Every loop but the first also carries a delay, because starting all four at
+   the top of their cycle meant nothing legible happened for the first several
+   seconds: the axis sat at its lightest, and the sheen was parked off the
+   right edge. They now open mid-gesture — the light crosses the palette at a
+   second and a half, the axis is already climbing, and the first lock-up takes
+   its turn as the plate finishes arriving.
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: no-preference) {
 
-  /* 19s · the clear-space rule circulates: the top edge travels right, the
+  /* 11s · the clear-space rule circulates: the top edge travels right, the
      bottom left, the sides down and up, so the box reads as being measured
      rather than as four lines sliding the same way. The corner ticks stay
      put — they are the datum the dashes move against. */
-  .bd-plate__guide { animation: plateAnts 19s linear infinite; }
+  .bd-plate__guide { animation: plateAnts 11s linear infinite; }
 
   /* 13.5s · the three lock-ups take their turn, 4.5s apart. A ring rather
      than a scale: the mark itself never changes size, which is rather the
@@ -3106,16 +3113,21 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
     box-shadow: 0 0 0 1.5px rgba(128, 195, 74, .6);
     opacity: 0;
   }
-  .bd-plate__variants li::after { animation: plateRing 13.5s var(--ease) infinite; }
-  .bd-plate__variants li:nth-child(2)::after { animation-delay: -9s; }
-  .bd-plate__variants li:nth-child(3)::after { animation-delay: -4.5s; }
+  /* The first turn is held back to .5s so it lands with the plate rather than
+     under it while it is still fading in. */
+  .bd-plate__variants li::after { animation: plateRing 13.5s var(--ease) .5s infinite; }
+  .bd-plate__variants li:nth-child(2)::after { animation-delay: -8.5s; }
+  .bd-plate__variants li:nth-child(3)::after { animation-delay: -4s; }
 
   /* 23s · Plus Jakarta Sans is one variable face, so the specimen can run its
      own weight axis from 300 to 800 and back. The labels underneath stay put
      at their real weights, as the fixed reference. */
-  .bd-plate__aa { animation: plateWeight 23s ease-in-out infinite; }
+  /* Started seven seconds in: the axis is already climbing when the plate
+     arrives, rather than sitting at 300 for the first second and a half and
+     taking ten to reach the top. */
+  .bd-plate__aa { animation: plateWeight 23s ease-in-out -7s infinite; }
 
-  /* 31s · light crossing the palette, the same gesture the hero's sheen
+  /* 19s · light crossing the palette, the same gesture the hero's sheen
      makes. It only shows on the three saturated cells; the surface tone is
      too pale to catch it, which is correct. */
   .bd-plate__palette { position: relative; overflow: hidden; }
@@ -3128,7 +3140,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
       rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, .3) 50%, rgba(255, 255, 255, 0) 62%);
     background-repeat: no-repeat;
     background-size: 240% 100%;
-    animation: plateSheen 31s ease-in-out infinite;
+    /* and eleven seconds in, so the light is already on its way across the
+       palette instead of parked off the right edge for the first ten */
+    animation: plateSheen 19s ease-in-out -3.25s infinite;
   }
 }
 
