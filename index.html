@@ -2934,12 +2934,22 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 /* The clear-space rule drawn around the lockup — the detail that says this is
    a system with rules and not a logo someone exported once. It hugs the mark
    rather than the panel, because clear space is measured off the mark. */
+/* Drawn as four dashed edges rather than a dashed border, because a border
+   cannot be moved and these travel. At rest they sit exactly where the border
+   did. */
 .bd-plate__guide {
+  --ant: rgba(18, 102, 181, .34);
   position: absolute;
   inset: -26px -30px;
-  border: 1px dashed rgba(18, 102, 181, .34);
-  border-radius: 1px;
   pointer-events: none;
+  background-image:
+    repeating-linear-gradient(90deg, var(--ant) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(90deg, var(--ant) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(0deg,  var(--ant) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(0deg,  var(--ant) 0 6px, transparent 6px 12px);
+  background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
+  background-position: 0 0, 0 100%, 0 0, 100% 0;
+  background-repeat: no-repeat;
 }
 .bd-plate__guide::before,
 .bd-plate__guide::after {
@@ -3064,6 +3074,84 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 /* the surface tone is too pale to carry white type */
 .bd-plate__palette li.is-light { color: var(--faint); box-shadow: inset 1px 0 0 var(--border); }
+
+/* --------------------------------------------------------------------------
+   THE PLATE, RUNNING
+   Four loops, built the way the hero builds its washes: each slow enough to
+   read as something the page is doing rather than something playing at you,
+   and on periods that share no useful factor, so they drift apart instead of
+   landing together every cycle.
+
+   Each one is the plate demonstrating itself — the clear space being measured,
+   the lock-ups being cycled, the weight axis being run, the colour catching
+   light. Nothing here moves for the sake of moving.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* 19s · the clear-space rule circulates: the top edge travels right, the
+     bottom left, the sides down and up, so the box reads as being measured
+     rather than as four lines sliding the same way. The corner ticks stay
+     put — they are the datum the dashes move against. */
+  .bd-plate__guide { animation: plateAnts 19s linear infinite; }
+
+  /* 13.5s · the three lock-ups take their turn, 4.5s apart. A ring rather
+     than a scale: the mark itself never changes size, which is rather the
+     point of a variants rail. */
+  .bd-plate__variants li { position: relative; }
+  .bd-plate__variants li::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1.5px rgba(128, 195, 74, .6);
+    opacity: 0;
+  }
+  .bd-plate__variants li::after { animation: plateRing 13.5s var(--ease) infinite; }
+  .bd-plate__variants li:nth-child(2)::after { animation-delay: -9s; }
+  .bd-plate__variants li:nth-child(3)::after { animation-delay: -4.5s; }
+
+  /* 23s · Plus Jakarta Sans is one variable face, so the specimen can run its
+     own weight axis from 300 to 800 and back. The labels underneath stay put
+     at their real weights, as the fixed reference. */
+  .bd-plate__aa { animation: plateWeight 23s ease-in-out infinite; }
+
+  /* 31s · light crossing the palette, the same gesture the hero's sheen
+     makes. It only shows on the three saturated cells; the surface tone is
+     too pale to catch it, which is correct. */
+  .bd-plate__palette { position: relative; overflow: hidden; }
+  .bd-plate__palette::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(102deg,
+      rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, .3) 50%, rgba(255, 255, 255, 0) 62%);
+    background-repeat: no-repeat;
+    background-size: 240% 100%;
+    animation: plateSheen 31s ease-in-out infinite;
+  }
+}
+
+@keyframes plateAnts {
+  to { background-position: 12px 0, -12px 100%, 0 12px, 100% -12px; }
+}
+/* The ring is on for the first third of the cycle, so the three delays put the
+   rail's turns 4.5s apart with a beat of nothing between them: it reads as
+   being stepped through rather than pulsing. */
+@keyframes plateRing {
+  0%        { opacity: 0; transform: scale(.88); }
+  4%, 14%   { opacity: 1; transform: scale(1); }
+  28%, 100% { opacity: 0; transform: scale(1.14); }
+}
+@keyframes plateWeight {
+  0%, 7%    { font-weight: 300; }
+  43%, 57%  { font-weight: 800; }
+  93%, 100% { font-weight: 300; }
+}
+@keyframes plateSheen {
+  0%, 100% { background-position: 132% 0; }
+  50%      { background-position: -32% 0; }
+}
 
 /* The plate joins the hero's staged entrance, landing after the buttons. */
 @media (prefers-reduced-motion: no-preference) {
