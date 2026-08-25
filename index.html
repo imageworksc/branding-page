@@ -3412,11 +3412,53 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .bd-trust .signals { max-width: none; }
 
 .bd-founded {
+  position: relative;
+  isolation: isolate;
   padding: clamp(28px, 3vw, 38px);
   border-radius: var(--r);
   border-top: 3px solid var(--blue);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
   box-shadow: var(--shadow-card);
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+}
+/* the text has to sit above the pool of light that rises behind it */
+.bd-founded > * { position: relative; z-index: 1; }
+
+/* The green rule wipes across the blue one from the left — the gesture the
+   tiles, the service rows and the plate's own head all make. It is placed over
+   the border rather than under it, so the card gains no height on hover. */
+.bd-founded::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  inset-inline: 0;
+  z-index: 2;
+  block-size: 3px;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .45s var(--ease);
+}
+.bd-founded:hover::before { transform: scaleX(1); }
+
+/* And a pool of green light rises behind the figure, the same way the
+   credibility band lights its own numbers. */
+.bd-founded::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(66% 54% at 24% 30%, rgba(128, 195, 74, .30), transparent 72%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .45s var(--ease);
+}
+.bd-founded:hover::after { opacity: 1; }
+
+.bd-founded:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 1px 3px rgba(20, 40, 80, .07), 0 20px 44px rgba(20, 40, 80, .14);
 }
 .bd-founded__year {
   font-size: clamp(48px, 5vw, 64px);
@@ -3439,6 +3481,23 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   font-size: 15px;
   line-height: 1.65;
   color: var(--muted);
+  transition: color .4s var(--ease);
+}
+
+/* The year lifts and the line underneath comes up out of grey. The figure
+   keeps its navy: the light behind it is what changes, and a number that
+   changes colour reads as a state rather than as something being lit. */
+.bd-founded__year { transition: transform .4s var(--ease); }
+.bd-founded:hover .bd-founded__year { transform: translateY(-3px); }
+.bd-founded:hover .bd-founded__sub { color: var(--ink); }
+
+/* The lift and the travel go; the light, the rule and the colour still read. */
+@media (prefers-reduced-motion: reduce) {
+  .bd-founded,
+  .bd-founded::before,
+  .bd-founded__year { transition: none; }
+  .bd-founded:hover { transform: none; }
+  .bd-founded:hover .bd-founded__year { transform: none; }
 }
 
 @media (max-width: 900px) {
