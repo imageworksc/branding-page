@@ -3195,12 +3195,16 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    below, where it sits next to the definition it illustrates.
    -------------------------------------------------------------------------- */
 .hero h1 { max-width: none; }
-.hero-sub { max-width: 80ch; }
+
+/* Three lines. Measured rather than reasoned: at this size the paragraph holds
+   two lines out to 80ch and turns to four at 50ch, so anything from 54ch to
+   72ch gives three and 62ch sits in the middle of that band, far enough from
+   either edge to survive the headline being re-cut. */
+.hero-sub { max-width: 62ch; }
 
 /* The reference's 620px was sized for a headline, a paragraph, a line of
-   credentials and two buttons. Holding it for a headline and a paragraph left
-   the band two-thirds empty. */
-.hero { min-height: min(56vh, 460px); }
+   credentials and two buttons. This one has no credentials line. */
+.hero { min-height: min(62vh, 520px); }
 
 /* --------------------------------------------------------------------------
    THE PLATE, UNDER THE CURSOR
@@ -3699,8 +3703,15 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
     </div>
     <div class="wrap hero-inner">
       <div class="hero-main">
-        <h1 id="hero-title">Branding &amp; Graphic Design Services</h1>
+        <!-- The break is set rather than left to the measure: the headline
+             reads as two named things, and where it turns should not depend on
+             how wide the window happens to be. -->
+        <h1 id="hero-title">Branding &amp; Graphic<br>Design Services</h1>
         <p class="hero-sub">Whether you're refreshing a tired logo, building a brand from the ground up, or need marketing collateral that actually gets used, our award-winning design and copywriting team at ImageWorks Creative handles it in-house, start to finish.</p>
+        <div class="btn-row">
+          <a class="btn btn--solid" href="/contact">Request a Quote<svg class="icon" width="15" height="15" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn--quiet" href="/portfolio">See Our Design Work</a>
+        </div>
       </div>
     </div>
   </section>
