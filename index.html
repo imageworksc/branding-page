@@ -3187,23 +3187,20 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 
 /* --------------------------------------------------------------------------
-   HERO SPLIT
-   The page's own hero composition: the copy on the left, the brand kit beside
-   it. The reference hero runs a single column and lets the washes carry the
-   right-hand side; this one has something to put there.
+   HERO MEASURE
+   The hero is a headline and a paragraph and nothing else, so both are let out
+   to the full width of the shell rather than held to the reference's narrower
+   column — that column existed to leave room for something beside it, and
+   there is nothing beside it now. The plate has gone down to the section
+   below, where it sits next to the definition it illustrates.
    -------------------------------------------------------------------------- */
-.bd-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
-  gap: clamp(36px, 5vw, 64px);
-  align-items: center;
-  width: 100%;
-}
-/* The plate sizes itself from its own rows; nothing here forces a height. */
+.hero h1 { max-width: none; }
+.hero-sub { max-width: 80ch; }
 
-@media (max-width: 900px) {
-  .bd-hero { grid-template-columns: 1fr; }
-}
+/* The reference's 620px was sized for a headline, a paragraph, a line of
+   credentials and two buttons. Holding it for a headline and a paragraph left
+   the band two-thirds empty. */
+.hero { min-height: min(56vh, 460px); }
 
 /* --------------------------------------------------------------------------
    THE PLATE, UNDER THE CURSOR
@@ -3365,22 +3362,34 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .bd-answer__turn strong { color: var(--navy); font-weight: 800; }
 
 @media (min-width: 900px) {
-  /* Side by side above 900px: the card on the left, its qualification on the
-     right as plain text — a second card there would make them look like two
-     answers rather than an answer and its footnote. */
+  /* The plate on the left, the answer and its qualification stacked on the
+     right. The plate is last in the source so that the stacked order puts the
+     question before the picture of it; the grid then places it first. */
   .bd-answer {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
-    column-gap: clamp(40px, 5vw, 76px);
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+    grid-template-rows: auto auto;
+    column-gap: clamp(40px, 5vw, 72px);
+    row-gap: clamp(22px, 2.4vw, 30px);
     align-items: start;
   }
-  .bd-answer__card { max-width: none; }
-  /* No rule between them up here: the card has an edge of its own, and a
-     hairline beside it would read as a second one. The top padding sets the
-     qualification's first line against the definition's. */
+  .bd-answer .bd-plate {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+  .bd-answer__card {
+    grid-column: 2;
+    grid-row: 1;
+    max-width: none;
+  }
+  /* No rule above it up here: the card beneath has an edge of its own, and a
+     hairline under it would read as a second one. */
   .bd-answer__turn {
-    max-width: 46ch;
-    padding-top: clamp(22px, 2.4vw, 32px);
+    grid-column: 2;
+    grid-row: 2;
+    max-width: none;
+    padding-top: 0;
     border-top: 0;
   }
 }
@@ -3688,20 +3697,31 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
       <span class="hero-wash__b"></span>
       <span class="hero-wash__s"></span>
     </div>
-    <div class="wrap hero-inner bd-hero">
+    <div class="wrap hero-inner">
       <div class="hero-main">
         <h1 id="hero-title">Branding &amp; Graphic Design Services</h1>
         <p class="hero-sub">Whether you're refreshing a tired logo, building a brand from the ground up, or need marketing collateral that actually gets used, our award-winning design and copywriting team at ImageWorks Creative handles it in-house, start to finish.</p>
-        <div class="btn-row">
-          <a class="btn btn--solid" href="/contact">Request a Quote<svg class="icon" width="15" height="15" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <a class="btn btn--quiet" href="/portfolio">See Our Design Work</a>
-        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · AI OVERVIEW / AEO ANSWER --------------------------------------- -->
+  <section class="band band--tint" aria-labelledby="what-is-branding">
+    <div class="wrap bd-answer reveal">
+      <!-- The question and its answer are one object, so they sit in one card.
+           The five marks strike through in order, .24s apart, the first time
+           the section is read. Not a word of the sentence is changed; the list
+           it already contains is simply allowed to be a list. -->
+      <div class="bd-answer__card">
+        <h2 class="bd-answer__title" id="what-is-branding">What Is Branding?</h2>
+        <p class="bd-answer__def">Branding is the complete system of how a business looks, sounds, and is remembered — its <span class="hl" style="--i:0">logo</span>, <span class="hl" style="--i:1">colors</span>, <span class="hl" style="--i:2">typography</span>, <span class="hl" style="--i:3">voice</span>, and the <span class="hl" style="--i:4">promise</span> those elements make to a customer every time they show up.</p>
       </div>
 
-      <!-- The hero visual the page already carried, redrawn as a page out of a
-           brand manual: the mark inside its clear-space rule, the lock-ups it
-           ships in, the typeface, and the palette. One surface divided by
-           hairlines. Every colour in it is a token from this stylesheet. -->
+      <p class="bd-answer__turn"><strong>It's bigger than a logo.</strong> A logo is one visual mark. Branding is the consistent identity that mark belongs to — applied across your website, print materials, social presence, and every other place your business shows up.</p>
+
+      <!-- The plate comes down from the hero to sit beside the definition it
+           illustrates. It is last in the source and placed left by the grid:
+           stacked, the question should still come before the picture of it. -->
       <figure class="bd-plate" aria-hidden="true">
         <figcaption class="bd-plate__head">
           <span><b>ImageWorks</b> Creative</span>
@@ -3741,22 +3761,6 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
           <li class="is-light" style="--c:#f2f5f9">F2F5F9</li>
         </ul>
       </figure>
-    </div>
-  </section>
-
-  <!-- 2 · AI OVERVIEW / AEO ANSWER --------------------------------------- -->
-  <section class="band band--tint" aria-labelledby="what-is-branding">
-    <div class="wrap bd-answer reveal">
-      <!-- The question and its answer are one object, so they sit in one card.
-           The five marks strike through in order, .24s apart, the first time
-           the section is read. Not a word of the sentence is changed; the list
-           it already contains is simply allowed to be a list. -->
-      <div class="bd-answer__card">
-        <h2 class="bd-answer__title" id="what-is-branding">What Is Branding?</h2>
-        <p class="bd-answer__def">Branding is the complete system of how a business looks, sounds, and is remembered — its <span class="hl" style="--i:0">logo</span>, <span class="hl" style="--i:1">colors</span>, <span class="hl" style="--i:2">typography</span>, <span class="hl" style="--i:3">voice</span>, and the <span class="hl" style="--i:4">promise</span> those elements make to a customer every time they show up.</p>
-      </div>
-
-      <p class="bd-answer__turn"><strong>It's bigger than a logo.</strong> A logo is one visual mark. Branding is the consistent identity that mark belongs to — applied across your website, print materials, social presence, and every other place your business shows up.</p>
     </div>
   </section>
 
