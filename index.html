@@ -3309,31 +3309,33 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
 /* --------------------------------------------------------------------------
    THE ANSWER
-   The definition names the five things a brand is made of, so the section is
-   built on that list rather than on a heading and a paragraph: the sentence is
-   set at display size and each of the five is struck through with the marker
-   the page already uses, one after the next, the first time the section is
-   read. It is the one place the copy enumerates anything, and it was being
-   thrown away as running text.
+   Two objects, side by side, the same height: a plate on the left and a card
+   on the right. They are built the same way on purpose — one surface, divided
+   by hairlines, with the quiet band held at the foot. The plate keeps its
+   palette down there; the card keeps the qualification. Read together they
+   rhyme, which is the whole argument of the section: a mark, and the system it
+   belongs to.
+
+   The definition names the five things a brand is made of, so the sentence is
+   set as a list: each of the five is struck through with the marker the page
+   already uses, .24s apart, the first time the section is read. It is the one
+   place the copy enumerates anything.
    -------------------------------------------------------------------------- */
 .bd-answer {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   gap: clamp(24px, 2.6vw, 34px);
 }
-/* Built on the same recipe as the founding-year card in the trust section: the
-   card gradient, the 2px corner, the layered shadow and the 3px blue rule
-   across the top. The question goes inside it with its answer — they are one
-   object, and the card holds both the way the other one holds its year and its
-   line of explanation. */
+
 .bd-answer__card {
+  display: flex;
+  flex-direction: column;
   padding: clamp(26px, 3vw, 38px);
   border-radius: var(--r);
   border-top: 3px solid var(--blue);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
   box-shadow: var(--shadow-card);
-  max-width: 46ch;
 }
 .bd-answer__title {
   font-size: clamp(21px, 1vw + 17px, 28px);
@@ -3352,51 +3354,48 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   color: var(--ink);
   text-wrap: pretty;
 }
-
-/* The turn sits under a rule, on the reading measure rather than the display
-   one, so the two are plainly a statement and its qualification. */
+/* Pushed to the foot of the card, so it reads as the footnote it is and the
+   card has a band at its bottom edge the way the plate has one at its own. */
 .bd-answer__turn {
-  max-width: var(--measure);
-  padding-top: clamp(22px, 2.4vw, 30px);
+  margin-top: auto;
+  padding-top: clamp(20px, 2.2vw, 28px);
   border-top: 1px solid var(--border);
   font-size: var(--step-0);
-  line-height: 1.75;
+  line-height: 1.7;
   color: var(--muted);
 }
 .bd-answer__turn strong { color: var(--navy); font-weight: 800; }
 
 @media (min-width: 900px) {
-  /* The plate on the left, the answer and its qualification stacked on the
-     right. The plate is last in the source so that the stacked order puts the
-     question before the picture of it; the grid then places it first. */
+  /* The plate is last in the source so that stacked on a phone the question
+     comes before the picture of it; the grid puts it first here. Both columns
+     stretch, so the two objects start and finish on the same lines. */
   .bd-answer {
     display: grid;
-    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
-    grid-template-rows: auto auto;
-    column-gap: clamp(40px, 5vw, 72px);
-    row-gap: clamp(22px, 2.4vw, 30px);
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(36px, 4.4vw, 64px);
+    align-items: stretch;
   }
-  .bd-answer .bd-plate {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    align-self: center;
-  }
-  .bd-answer__card {
-    grid-column: 2;
-    grid-row: 1;
-    max-width: none;
-  }
-  /* No rule above it up here: the card beneath has an edge of its own, and a
-     hairline under it would read as a second one. */
-  .bd-answer__turn {
-    grid-column: 2;
-    grid-row: 2;
-    max-width: none;
-    padding-top: 0;
-    border-top: 0;
-  }
+  /* The row is stated as well as the column: auto-placement never goes
+     backwards, so naming only the column left the plate — which comes second
+     in the source — stranded on a row of its own beneath the card. */
+  .bd-answer .bd-plate { grid-column: 1; grid-row: 1; }
+  .bd-answer__card { grid-column: 2; grid-row: 1; }
 }
+
+/* The plate is a stack of bands, so it can take a stated height and give the
+   extra to the field the mark sits on. Nothing else in it should grow: the
+   specimen and the palette are the size they are.
+
+   It also takes a rule across its top, green against the card's blue — the
+   pairing the pricing cards already use for two things standing side by side.
+   Without it the card looked finished and the plate looked like a screenshot. */
+.bd-answer .bd-plate {
+  display: flex;
+  flex-direction: column;
+  border-top: 3px solid var(--green);
+}
+.bd-answer .bd-plate__stage { flex: 1; }
 
 /* --------------------------------------------------------------------------
    TRUST
@@ -3719,16 +3718,17 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   <!-- 2 · AI OVERVIEW / AEO ANSWER --------------------------------------- -->
   <section class="band band--tint" aria-labelledby="what-is-branding">
     <div class="wrap bd-answer reveal">
-      <!-- The question and its answer are one object, so they sit in one card.
+      <!-- The question, its answer and the qualification are one object, so
+           they sit in one card — with the qualification held at its foot under
+           a hairline, the way the plate holds its palette at its own.
            The five marks strike through in order, .24s apart, the first time
            the section is read. Not a word of the sentence is changed; the list
            it already contains is simply allowed to be a list. -->
       <div class="bd-answer__card">
         <h2 class="bd-answer__title" id="what-is-branding">What Is Branding?</h2>
         <p class="bd-answer__def">Branding is the complete system of how a business looks, sounds, and is remembered — its <span class="hl" style="--i:0">logo</span>, <span class="hl" style="--i:1">colors</span>, <span class="hl" style="--i:2">typography</span>, <span class="hl" style="--i:3">voice</span>, and the <span class="hl" style="--i:4">promise</span> those elements make to a customer every time they show up.</p>
+        <p class="bd-answer__turn"><strong>It's bigger than a logo.</strong> A logo is one visual mark. Branding is the consistent identity that mark belongs to — applied across your website, print materials, social presence, and every other place your business shows up.</p>
       </div>
-
-      <p class="bd-answer__turn"><strong>It's bigger than a logo.</strong> A logo is one visual mark. Branding is the consistent identity that mark belongs to — applied across your website, print materials, social presence, and every other place your business shows up.</p>
 
       <!-- The plate comes down from the hero to sit beside the definition it
            illustrates. It is last in the source and placed left by the grid:
