@@ -2880,457 +2880,254 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 }
 
 /* --------------------------------------------------------------------------
-   IDENTITY PLATE — the hero visual
-   A page out of a brand manual: the mark inside its clear-space rule, the
-   variants it ships in, the typeface, and the palette. One surface divided by
-   hairlines, not a stack of cards — the same editorial move the section below
-   makes when it sets the definition against a single rule.
+   TYPE SCALE
+   The reference system runs a larger scale than this page's copy was written
+   for — a 64px headline against 48, 44px section heads against 38. These bring
+   every size back to the source document. Declared here rather than in the
+   shared stylesheet above, which belongs to Custom Web Design.
    -------------------------------------------------------------------------- */
-.bd-plate {
-  margin: 0;
+.hero h1 {
+  font-size: clamp(32px, 4.2vw, 48px);
+  line-height: 1.12;
+  letter-spacing: -.8px;
+  max-width: none;
+}
+.hero-sub {
+  font-size: 18px;
+  line-height: 1.75;
+  max-width: 720px;
+}
+.sec-title {
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.15;
+  letter-spacing: -.5px;
+}
+.lead { font-size: 18px; line-height: 1.75; max-width: 720px; }
+
+/* The closing band sets its own heading size, tuned to hold one line; the cap
+   comes down to the source's 38 with the nowrap left intact. */
+.final .sec-title { font-size: clamp(19px, 3.1vw, 38px); }
+
+/* the service rows: 20px heads over 18px copy, as the source sets them */
+.cms-body dt { font-size: 20px; letter-spacing: -.3px; }
+.cms-body dd { font-size: 18px; line-height: 1.7; }
+.bd-chip { font-size: 14px; }
+
+.signals li { font-size: 18px; line-height: 1.5; }
+.arrow-link { font-size: 14px; }
+.btn { font-size: 15px; }
+
+/* --------------------------------------------------------------------------
+   BRAND KIT — the hero visual
+   The source page's flat lay, rebuilt: a stationery card lying at an angle, a
+   swatch strip under it, and the mark sitting over both. Same composition and
+   the same angles; the corners, the surfaces and the shadows come from this
+   page's own system rather than the source's.
+
+   Each piece floats on its own clock, and each straightens under the cursor —
+   the drift runs on the outer element and the angle on the inner one, so a
+   loop and a hover never fight over the same transform.
+   -------------------------------------------------------------------------- */
+/* Capped at the width the source's own column gave it. The shell here is wider
+   than the source's, and left to fill it the card stretched flat and the three
+   pieces drifted apart into a scatter. */
+.bk {
+  position: relative;
   width: 100%;
+  max-width: 460px;
+  margin-inline: auto;
+  height: clamp(300px, 26vw, 360px);
+}
+
+/* ---- the stationery card ---- */
+.bk-card {
+  position: absolute;
+  top: 14px;
+  left: 6%;
+  width: 68%;
+  animation: bkCardFloat 17s ease-in-out -6s infinite;
+}
+.bk-card__face {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 26px;
   border-radius: var(--r);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
+  box-shadow: 0 20px 44px rgba(20, 60, 102, .18);
+  transform: rotate(-5deg);
+  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
 }
-
-/* ---- the manual's running head ---- */
-.bd-plate__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--border);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--faint);
+.bk-card__face:hover {
+  transform: rotate(0deg) scale(1.03);
+  box-shadow: 0 26px 56px rgba(20, 60, 102, .24);
 }
-.bd-plate__head b { color: var(--navy); font-weight: 800; }
-
-/* ---- the mark, on a field, beside the variants rail ---- */
-.bd-plate__stage {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 78px;
-  border-bottom: 1px solid var(--border);
-}
-
-.bd-plate__field {
-  position: relative;
-  display: grid;
-  place-items: center;
-  min-block-size: 186px;
-  padding: 34px 30px;
-  /* the manual's measuring grid, faint enough to read as paper */
-  background-image:
-    linear-gradient(to right, rgba(20, 60, 102, .05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(20, 60, 102, .05) 1px, transparent 1px);
-  background-size: 22px 22px;
-}
-
-/* The clear-space rule drawn around the lockup — the detail that says this is
-   a system with rules and not a logo someone exported once. It hugs the mark
-   rather than the panel, because clear space is measured off the mark. */
-/* Drawn as four dashed edges rather than a dashed border, because a border
-   cannot be moved and these travel. At rest they sit exactly where the border
-   did. */
-.bd-plate__guide {
-  --ant: rgba(18, 102, 181, .34);
-  position: absolute;
-  inset: -26px -30px;
-  pointer-events: none;
-  background-image:
-    repeating-linear-gradient(90deg, var(--ant) 0 6px, transparent 6px 12px),
-    repeating-linear-gradient(90deg, var(--ant) 0 6px, transparent 6px 12px),
-    repeating-linear-gradient(0deg,  var(--ant) 0 6px, transparent 6px 12px),
-    repeating-linear-gradient(0deg,  var(--ant) 0 6px, transparent 6px 12px);
-  background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
-  background-position: 0 0, 0 100%, 0 0, 100% 0;
-  background-repeat: no-repeat;
-}
-.bd-plate__guide::before,
-.bd-plate__guide::after {
-  content: '';
-  position: absolute;
-  inline-size: 9px;
-  block-size: 9px;
-  border: 0 solid var(--blue);
-}
-.bd-plate__guide::before {
-  top: -1px; left: -1px;
-  border-top-width: 2px;
-  border-left-width: 2px;
-}
-.bd-plate__guide::after {
-  right: -1px; bottom: -1px;
-  border-right-width: 2px;
-  border-bottom-width: 2px;
-}
-
-.bd-plate__lockup {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.bd-plate__glyph {
-  display: grid;
-  place-items: center;
-  inline-size: 52px;
-  block-size: 52px;
-  flex: none;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--blue), var(--navy));
-  color: #fff;
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: .02em;
-}
-.bd-plate__word { display: flex; flex-direction: column; gap: 5px; }
-.bd-plate__word b {
-  font-size: 19px;
-  font-weight: 800;
-  letter-spacing: -.025em;
-  line-height: 1;
-  color: var(--navy);
-}
-.bd-plate__word span {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  line-height: 1;
-  color: var(--green-ink);
-}
-
-/* ---- the rail: the three lock-ups the identity actually ships with ---- */
-.bd-plate__variants {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 14px;
-  padding: 20px 0;
-  border-left: 1px solid var(--border);
-}
-.bd-plate__variants li {
-  display: grid;
-  place-items: center;
-  inline-size: 34px;
-  block-size: 34px;
-  margin-inline: auto;
-  border-radius: 50%;
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: .02em;
-}
-.bd-plate__variants li:nth-child(1) { background: var(--navy); color: #fff; }
-.bd-plate__variants li:nth-child(2) { background: var(--green); color: #14300a; }
-.bd-plate__variants li:nth-child(3) { color: var(--navy); box-shadow: inset 0 0 0 1.5px var(--border); }
-
-/* ---- the specimen ---- */
-.bd-plate__type {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-}
-.bd-plate__aa {
-  font-size: 40px;
-  font-weight: 800;
-  letter-spacing: -.05em;
-  line-height: .85;
-  color: var(--navy);
-}
-.bd-plate__type div { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
-.bd-plate__type p { font-size: 13px; font-weight: 700; color: var(--ink); }
-.bd-plate__weights {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px 10px;
-  font-size: 11px;
-  color: var(--faint);
-}
-.bd-plate__weights span:nth-child(1) { font-weight: 300; }
-.bd-plate__weights span:nth-child(2) { font-weight: 500; }
-.bd-plate__weights span:nth-child(3) { font-weight: 800; }
-
-/* ---- the palette, run to the edges: the one place on the plate where the
-       colour is the subject rather than the frame ---- */
-.bd-plate__palette { display: grid; grid-template-columns: repeat(4, 1fr); }
-.bd-plate__palette li {
-  display: flex;
-  align-items: flex-end;
-  min-block-size: 74px;
-  padding: 9px 10px;
-  background: var(--c);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .1em;
-  color: rgba(255, 255, 255, .82);
-}
-/* the surface tone is too pale to carry white type */
-.bd-plate__palette li.is-light { color: var(--faint); box-shadow: inset 1px 0 0 var(--border); }
-
-/* --------------------------------------------------------------------------
-   THE PLATE, RUNNING
-   Four loops, built the way the hero builds its washes: each slow enough to
-   read as something the page is doing rather than something playing at you,
-   and on periods that share no useful factor, so they drift apart instead of
-   landing together every cycle.
-
-   Each one is the plate demonstrating itself — the clear space being measured,
-   the lock-ups being cycled, the weight axis being run, the colour catching
-   light. Nothing here moves for the sake of moving.
-
-   Every loop but the first also carries a delay, because starting all four at
-   the top of their cycle meant nothing legible happened for the first several
-   seconds: the axis sat at its lightest, and the sheen was parked off the
-   right edge. They now open mid-gesture — the light crosses the palette at a
-   second and a half, the axis is already climbing, and the first lock-up takes
-   its turn as the plate finishes arriving.
-   -------------------------------------------------------------------------- */
-@media (prefers-reduced-motion: no-preference) {
-
-  /* 11s · the clear-space rule circulates: the top edge travels right, the
-     bottom left, the sides down and up, so the box reads as being measured
-     rather than as four lines sliding the same way. The corner ticks stay
-     put — they are the datum the dashes move against. */
-  .bd-plate__guide { animation: plateAnts 11s linear infinite; }
-
-  /* 13.5s · the three lock-ups take their turn, 4.5s apart. A ring rather
-     than a scale: the mark itself never changes size, which is rather the
-     point of a variants rail. */
-  .bd-plate__variants li { position: relative; }
-  .bd-plate__variants li::after {
-    content: '';
-    position: absolute;
-    inset: -5px;
-    border-radius: 50%;
-    box-shadow: 0 0 0 1.5px rgba(128, 195, 74, .6);
-    opacity: 0;
-  }
-  /* The first turn is held back to .5s so it lands with the plate rather than
-     under it while it is still fading in. */
-  .bd-plate__variants li::after { animation: plateRing 13.5s var(--ease) .5s infinite; }
-  .bd-plate__variants li:nth-child(2)::after { animation-delay: -8.5s; }
-  .bd-plate__variants li:nth-child(3)::after { animation-delay: -4s; }
-
-  /* 23s · Plus Jakarta Sans is one variable face, so the specimen can run its
-     own weight axis from 300 to 800 and back. The labels underneath stay put
-     at their real weights, as the fixed reference. */
-  /* Started seven seconds in: the axis is already climbing when the plate
-     arrives, rather than sitting at 300 for the first second and a half and
-     taking ten to reach the top. */
-  .bd-plate__aa { animation: plateWeight 23s ease-in-out -7s infinite; }
-
-  /* 19s · light crossing the palette, the same gesture the hero's sheen
-     makes. It only shows on the three saturated cells; the surface tone is
-     too pale to catch it, which is correct. */
-  .bd-plate__palette { position: relative; overflow: hidden; }
-  .bd-plate__palette::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: linear-gradient(102deg,
-      rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, .3) 50%, rgba(255, 255, 255, 0) 62%);
-    background-repeat: no-repeat;
-    background-size: 240% 100%;
-    /* and eleven seconds in, so the light is already on its way across the
-       palette instead of parked off the right edge for the first ten */
-    animation: plateSheen 19s ease-in-out -3.25s infinite;
-  }
-}
-
-@keyframes plateAnts {
-  to { background-position: 12px 0, -12px 100%, 0 12px, 100% -12px; }
-}
-/* The ring is on for the first third of the cycle, so the three delays put the
-   rail's turns 4.5s apart with a beat of nothing between them: it reads as
-   being stepped through rather than pulsing. */
-@keyframes plateRing {
-  0%        { opacity: 0; transform: scale(.88); }
-  4%, 14%   { opacity: 1; transform: scale(1); }
-  28%, 100% { opacity: 0; transform: scale(1.14); }
-}
-@keyframes plateWeight {
-  0%, 7%    { font-weight: 300; }
-  43%, 57%  { font-weight: 800; }
-  93%, 100% { font-weight: 300; }
-}
-@keyframes plateSheen {
-  0%, 100% { background-position: 132% 0; }
-  50%      { background-position: -32% 0; }
-}
-
-/* The plate joins the hero's staged entrance, landing after the buttons. */
-@media (prefers-reduced-motion: no-preference) {
-  [data-hero-anim="on"] .bd-plate { animation: hero-in .8s var(--ease) .5s backwards; }
-}
-
-@media (max-width: 1120px) and (min-width: 901px) {
-  .bd-plate__field { min-block-size: 156px; }
-  .bd-plate__stage { grid-template-columns: minmax(0, 1fr) 66px; }
-}
-
-@media (max-width: 520px) {
-  .bd-plate__stage { grid-template-columns: minmax(0, 1fr) 62px; }
-  .bd-plate__field { min-block-size: 160px; padding: 28px 20px; }
-  .bd-plate__glyph { inline-size: 44px; block-size: 44px; font-size: 15px; }
-  .bd-plate__word b { font-size: 16px; }
-  .bd-plate__aa { font-size: 34px; }
-  .bd-plate__palette li { min-block-size: 62px; }
-}
-
-/* --------------------------------------------------------------------------
-   HERO MEASURE
-   The hero is a headline and a paragraph and nothing else, so both are let out
-   to the full width of the shell rather than held to the reference's narrower
-   column — that column existed to leave room for something beside it, and
-   there is nothing beside it now. The plate has gone down to the section
-   below, where it sits next to the definition it illustrates.
-   -------------------------------------------------------------------------- */
-.hero h1 { max-width: none; }
-
-/* Three lines. Measured rather than reasoned: at this size the paragraph holds
-   two lines out to 80ch and turns to four at 50ch, so anything from 54ch to
-   72ch gives three and 62ch sits in the middle of that band, far enough from
-   either edge to survive the headline being re-cut. */
-.hero-sub { max-width: 62ch; }
-
-/* The reference's 620px was sized for a headline, a paragraph, a line of
-   credentials and two buttons. This one has no credentials line. */
-.hero { min-height: min(62vh, 520px); }
-
-/* --------------------------------------------------------------------------
-   THE PLATE, UNDER THE CURSOR
-   Each band of the plate answers on its own, because each is a different kind
-   of thing to look at. The gestures are the ones the rest of the page already
-   uses — a green rule wiping in from the left, a tinted row, a lift — so the
-   plate behaves like the cards and rows further down rather than inventing a
-   vocabulary for itself.
-   -------------------------------------------------------------------------- */
-
-/* ---- the running head: the rule wipes in, the right label steps in ---- */
-.bd-plate__head { position: relative; transition: color .35s var(--ease); }
-.bd-plate__head::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0; bottom: -1px;
-  block-size: 2px;
-  background: var(--green);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform .45s var(--ease);
-}
-.bd-plate__head:hover::after { transform: scaleX(1); }
-.bd-plate__head span:last-child { transition: transform .35s var(--ease), color .35s var(--ease); }
-.bd-plate__head:hover span:last-child { transform: translateX(-4px); color: var(--navy); }
-
-/* ---- the field: the measuring grid comes up, the clear space opens out,
-        and the mark lifts off the paper it is being set on ---- */
-.bd-plate__field::before {
+/* light crossing the card, the gesture the hero's own ground makes */
+.bk-card__face::after {
   content: '';
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(to right, rgba(20, 60, 102, .07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(20, 60, 102, .07) 1px, transparent 1px);
-  background-size: 22px 22px;
-  opacity: 0;
-  transition: opacity .45s var(--ease);
   pointer-events: none;
+  background-image: linear-gradient(102deg,
+    rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, .6) 50%, rgba(255, 255, 255, 0) 62%);
+  background-repeat: no-repeat;
+  background-size: 240% 100%;
+  animation: bkSheen 19s ease-in-out -4s infinite;
 }
-.bd-plate__field:hover::before { opacity: 1; }
-
-.bd-plate__guide { transition: inset .45s var(--ease), opacity .45s var(--ease); }
-.bd-plate__field:hover .bd-plate__guide { inset: -32px -38px; }
-.bd-plate__lockup { transition: transform .45s var(--ease); }
-.bd-plate__field:hover .bd-plate__lockup { transform: translateY(-3px); }
-
-/* ---- the rail: the cycle holds while you are reading it, and whichever one
-        you point at takes the ring instead ---- */
-/* the auto cycle is dropped outright rather than paused: a paused ring stays
-   lit on whichever one it caught, and two rings at once reads as a fault */
-.bd-plate__variants:hover li::after { animation: none; }
-.bd-plate__variants li { transition: transform .3s var(--ease); }
-.bd-plate__variants li:hover { transform: scale(1.12); }
-.bd-plate__variants li::before {
-  content: '';
-  position: absolute;
-  inset: -5px;
+.bk-dot {
+  display: block;
+  inline-size: 32px;
+  block-size: 32px;
+  margin-bottom: 16px;
   border-radius: 50%;
-  box-shadow: 0 0 0 1.5px rgba(128, 195, 74, .6);
-  opacity: 0;
-  transform: scale(.88);
-  transition: opacity .3s var(--ease), transform .3s var(--ease);
+  background: linear-gradient(135deg, var(--green), var(--blue));
+  transition: transform .45s var(--ease);
 }
-.bd-plate__variants li:hover::before { opacity: 1; transform: scale(1); }
+.bk-card__face:hover .bk-dot { transform: scale(1.14) rotate(-14deg); }
+.bk-line {
+  display: block;
+  block-size: 7px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background: var(--border);
+}
+.bk-line--w60 { inline-size: 60%; }
+.bk-line--w38 { inline-size: 38%; margin-bottom: 0; background: var(--chip-blue); }
 
-/* ---- the specimen: the axis holds where you caught it, the row tints the
-        way the service rows do, and the face steps up ---- */
-.bd-plate__type { position: relative; transition: background-color .35s var(--ease); }
-.bd-plate__type:hover { background: var(--tint-blue); }
-.bd-plate__type:hover .bd-plate__aa { animation-play-state: paused; }
-.bd-plate__aa { transform-origin: left center; transition: transform .4s var(--ease); }
-.bd-plate__type:hover .bd-plate__aa { transform: scale(1.08); }
-.bd-plate__weights span { transition: color .35s var(--ease); }
-.bd-plate__type:hover .bd-plate__weights span { color: var(--navy); }
+/* ---- the swatch strip ---- */
+.bk-swatches {
+  position: absolute;
+  right: 4%;
+  bottom: 22px;
+  animation: bkStripDrift 23s ease-in-out -8s infinite;
+}
+.bk-swatches__strip {
+  display: flex;
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: 0 14px 30px rgba(20, 60, 102, .16);
+  transform: rotate(4deg);
+  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
+}
+.bk-swatches__strip:hover {
+  transform: rotate(0deg);
+  box-shadow: 0 20px 42px rgba(20, 60, 102, .22);
+}
+.bk-swatches__strip li {
+  display: block;
+  inline-size: 30px;
+  block-size: 74px;
+  transition: inline-size .45s var(--ease);
+  animation: bkSwatchLit 11s ease-in-out infinite;
+}
+.bk-swatches__strip li:nth-child(1) { background: var(--navy); }
+.bk-swatches__strip li:nth-child(2) { background: var(--blue); animation-delay: -8.25s; }
+.bk-swatches__strip li:nth-child(3) { background: var(--green); animation-delay: -5.5s; }
+.bk-swatches__strip li:nth-child(4) { background: var(--green-ink); animation-delay: -2.75s; }
+.bk-swatches__strip li:hover { inline-size: 48px; }
 
-/* ---- the palette: the cell you point at takes the room, the way a swatch
-        gets pulled out of a chip book to be looked at ---- */
-.bd-plate__palette { transition: grid-template-columns .5s var(--ease); }
-.bd-plate__palette li { transition: color .35s var(--ease); }
-.bd-plate__palette:hover li { color: rgba(255, 255, 255, .55); }
-.bd-plate__palette li:hover { color: #fff; }
-.bd-plate__palette:hover li.is-light { color: #b3bfcd; }
-.bd-plate__palette li.is-light:hover { color: var(--navy); }
-.bd-plate__palette:has(li:nth-child(1):hover) { grid-template-columns: 1.9fr 1fr 1fr 1fr; }
-.bd-plate__palette:has(li:nth-child(2):hover) { grid-template-columns: 1fr 1.9fr 1fr 1fr; }
-.bd-plate__palette:has(li:nth-child(3):hover) { grid-template-columns: 1fr 1fr 1.9fr 1fr; }
-.bd-plate__palette:has(li:nth-child(4):hover) { grid-template-columns: 1fr 1fr 1fr 1.9fr; }
+/* ---- the mark ---- */
+.bk-mark {
+  position: absolute;
+  top: 54%;
+  left: 60%;
+  animation: bkMarkPulse 13s ease-in-out -3s infinite;
+}
+.bk-mark__disc {
+  display: grid;
+  place-items: center;
+  inline-size: 84px;
+  block-size: 84px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), var(--navy));
+  box-shadow: 0 16px 32px rgba(20, 60, 102, .26);
+  transform: rotate(8deg);
+  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
+}
+.bk-mark__disc:hover {
+  transform: rotate(0deg) scale(1.08);
+  box-shadow: 0 22px 46px rgba(20, 60, 102, .34);
+}
+.bk-mark__disc span {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: .5px;
+  transform: rotate(-8deg);
+  transition: transform .45s var(--ease);
+}
+.bk-mark__disc:hover span { transform: rotate(0deg); }
 
-/* Nothing above needs motion to make sense — the tints, the rings and the
-   widths all still read. Only the travel is dropped. */
+/* Five clocks, none of them a factor of another, so the pieces never come back
+   round together. Each opens part-way in so the kit is already moving when the
+   page arrives rather than sitting still for the first several seconds. */
+@keyframes bkCardFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+@keyframes bkStripDrift {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-7px, -9px); }
+}
+@keyframes bkMarkPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%      { transform: translate(-50%, -50%) scale(1.06); }
+}
+@keyframes bkSheen {
+  0%, 100% { background-position: 132% 0; }
+  50%      { background-position: -32% 0; }
+}
+@keyframes bkSwatchLit {
+  0%, 6%    { filter: brightness(1.22); }
+  20%, 100% { filter: brightness(1); }
+}
+
+/* The angles, the shadows and the widths all still read without the travel. */
 @media (prefers-reduced-motion: reduce) {
-  .bd-plate__head::after,
-  .bd-plate__guide,
-  .bd-plate__lockup,
-  .bd-plate__aa,
-  .bd-plate__palette,
-  .bd-plate__variants li { transition: none; }
-  .bd-plate__field:hover .bd-plate__lockup,
-  .bd-plate__variants li:hover { transform: none; }
+  .bk-card, .bk-swatches, .bk-mark,
+  .bk-card__face::after,
+  .bk-swatches__strip li { animation: none; }
+  .bk-mark { transform: translate(-50%, -50%); }
+}
+
+/* --------------------------------------------------------------------------
+   HERO SPLIT
+   The source's own proportions: 1.15 to 1, with the copy on the left and the
+   kit beside it.
+   -------------------------------------------------------------------------- */
+.bd-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(36px, 4.6vw, 56px);
+  align-items: center;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .bd-hero { grid-template-columns: 1fr; }
+  /* In a narrower frame the three pieces keep their sizes and start to collide,
+     so the mark steps left and up off the swatch strip. */
+  .bk { height: 290px; }
+  .bk-mark { top: 48%; left: 44%; }
+  .bk-swatches { bottom: 14px; }
 }
 
 /* --------------------------------------------------------------------------
    THE ANSWER
-   Two objects, side by side, the same height: a plate on the left and a card
-   on the right. They are built the same way on purpose — one surface, divided
-   by hairlines, with the quiet band held at the foot. The plate keeps its
-   palette down there; the card keeps the qualification. Read together they
-   rhyme, which is the whole argument of the section: a mark, and the system it
-   belongs to.
+   One card holding the question, the definition and the qualification, with
+   the qualification at its foot under a hairline. The source sets its answer
+   block to 820px and leaves the rest of the band empty; this does the same.
 
    The definition names the five things a brand is made of, so the sentence is
    set as a list: each of the five is struck through with the marker the page
    already uses, .24s apart, the first time the section is read. It is the one
    place the copy enumerates anything.
    -------------------------------------------------------------------------- */
-.bd-answer {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: clamp(24px, 2.6vw, 34px);
-}
+.bd-answer { display: block; }
 
 .bd-answer__card {
   display: flex;
   flex-direction: column;
+  max-width: 820px;
   padding: clamp(26px, 3vw, 38px);
   border-radius: var(--r);
   border-top: 3px solid var(--blue);
@@ -3348,54 +3145,22 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 /* Set in body ink rather than navy: the five marked terms are navy and bold,
    and they only stand out from the sentence if the sentence is not. */
 .bd-answer__def {
-  font-size: clamp(17px, .55vw + 15px, 20px);
+  font-size: 18px;
   font-weight: 500;
-  line-height: 1.62;
+  line-height: 1.75;
   color: var(--ink);
   text-wrap: pretty;
 }
-/* Pushed to the foot of the card, so it reads as the footnote it is and the
-   card has a band at its bottom edge the way the plate has one at its own. */
+/* At the foot, under a hairline, the way the source's own answer block ends. */
 .bd-answer__turn {
-  margin-top: auto;
+  margin-top: clamp(20px, 2.2vw, 28px);
   padding-top: clamp(20px, 2.2vw, 28px);
   border-top: 1px solid var(--border);
-  font-size: var(--step-0);
-  line-height: 1.7;
+  font-size: 18px;
+  line-height: 1.75;
   color: var(--muted);
 }
 .bd-answer__turn strong { color: var(--navy); font-weight: 800; }
-
-@media (min-width: 900px) {
-  /* The plate is last in the source so that stacked on a phone the question
-     comes before the picture of it; the grid puts it first here. Both columns
-     stretch, so the two objects start and finish on the same lines. */
-  .bd-answer {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: clamp(36px, 4.4vw, 64px);
-    align-items: stretch;
-  }
-  /* The row is stated as well as the column: auto-placement never goes
-     backwards, so naming only the column left the plate — which comes second
-     in the source — stranded on a row of its own beneath the card. */
-  .bd-answer .bd-plate { grid-column: 1; grid-row: 1; }
-  .bd-answer__card { grid-column: 2; grid-row: 1; }
-}
-
-/* The plate is a stack of bands, so it can take a stated height and give the
-   extra to the field the mark sits on. Nothing else in it should grow: the
-   specimen and the palette are the size they are.
-
-   It also takes a rule across its top, green against the card's blue — the
-   pairing the pricing cards already use for two things standing side by side.
-   Without it the card looked finished and the plate looked like a screenshot. */
-.bd-answer .bd-plate {
-  display: flex;
-  flex-direction: column;
-  border-top: 3px solid var(--green);
-}
-.bd-answer .bd-plate__stage { flex: 1; }
 
 /* --------------------------------------------------------------------------
    TRUST
@@ -3461,18 +3226,18 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   box-shadow: 0 1px 3px rgba(20, 40, 80, .07), 0 20px 44px rgba(20, 40, 80, .14);
 }
 .bd-founded__year {
-  font-size: clamp(48px, 5vw, 64px);
+  font-size: 56px;
   font-weight: 800;
-  line-height: .92;
-  letter-spacing: -.045em;
+  line-height: 1;
+  letter-spacing: -2px;
   font-variant-numeric: tabular-nums;
   color: var(--navy);
 }
 .bd-founded__label {
   margin-top: 10px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .16em;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--blue);
 }
@@ -3759,7 +3524,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
       <span class="hero-wash__b"></span>
       <span class="hero-wash__s"></span>
     </div>
-    <div class="wrap hero-inner">
+    <div class="wrap hero-inner bd-hero">
       <div class="hero-main">
         <!-- The break is set rather than left to the measure: the headline
              reads as two named things, and where it turns should not depend on
@@ -3769,6 +3534,31 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
         <div class="btn-row">
           <a class="btn btn--solid" href="/contact">Request a Quote<svg class="icon" width="15" height="15" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           <a class="btn btn--quiet" href="/portfolio">See Our Design Work</a>
+        </div>
+      </div>
+
+      <!-- The source page's flat lay: a stationery card at an angle, a swatch
+           strip under it, the mark over both. Each piece drifts on its own
+           clock and straightens under the cursor — the drift sits on the outer
+           element and the angle on the inner one, so the loop and the hover
+           never fight over the same transform. -->
+      <div class="bk" aria-hidden="true">
+        <div class="bk-card">
+          <div class="bk-card__face">
+            <span class="bk-dot"></span>
+            <span class="bk-line bk-line--w60"></span>
+            <span class="bk-line bk-line--w38"></span>
+          </div>
+        </div>
+
+        <div class="bk-swatches">
+          <ul class="bk-swatches__strip">
+            <li></li><li></li><li></li><li></li>
+          </ul>
+        </div>
+
+        <div class="bk-mark">
+          <div class="bk-mark__disc"><span>IW</span></div>
         </div>
       </div>
     </div>
@@ -3788,49 +3578,6 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
         <p class="bd-answer__def">Branding is the complete system of how a business looks, sounds, and is remembered — its <span class="hl" style="--i:0">logo</span>, <span class="hl" style="--i:1">colors</span>, <span class="hl" style="--i:2">typography</span>, <span class="hl" style="--i:3">voice</span>, and the <span class="hl" style="--i:4">promise</span> those elements make to a customer every time they show up.</p>
         <p class="bd-answer__turn"><strong>It's bigger than a logo.</strong> A logo is one visual mark. Branding is the consistent identity that mark belongs to — applied across your website, print materials, social presence, and every other place your business shows up.</p>
       </div>
-
-      <!-- The plate comes down from the hero to sit beside the definition it
-           illustrates. It is last in the source and placed left by the grid:
-           stacked, the question should still come before the picture of it. -->
-      <figure class="bd-plate" aria-hidden="true">
-        <figcaption class="bd-plate__head">
-          <span><b>ImageWorks</b> Creative</span>
-          <span>Identity System</span>
-        </figcaption>
-
-        <div class="bd-plate__stage">
-          <div class="bd-plate__field">
-            <div class="bd-plate__lockup">
-              <span class="bd-plate__guide"></span>
-              <span class="bd-plate__glyph">IW</span>
-              <span class="bd-plate__word">
-                <b>ImageWorks</b>
-                <span>Creative</span>
-              </span>
-            </div>
-          </div>
-          <ul class="bd-plate__variants">
-            <li>IW</li>
-            <li>IW</li>
-            <li>IW</li>
-          </ul>
-        </div>
-
-        <div class="bd-plate__type">
-          <span class="bd-plate__aa">Aa</span>
-          <div>
-            <p>Plus Jakarta Sans</p>
-            <span class="bd-plate__weights"><span>Light</span><span>Medium</span><span>Extrabold</span></span>
-          </div>
-        </div>
-
-        <ul class="bd-plate__palette">
-          <li style="--c:#143c66">143C66</li>
-          <li style="--c:#1266b5">1266B5</li>
-          <li style="--c:#80c34a">80C34A</li>
-          <li class="is-light" style="--c:#f2f5f9">F2F5F9</li>
-        </ul>
-      </figure>
     </div>
   </section>
 
