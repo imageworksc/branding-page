@@ -2930,13 +2930,23 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    underneath, on periods sharing no factor, each opening part-way in.
    -------------------------------------------------------------------------- */
 .bk {
-  display: grid;
-  grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr);
-  gap: 12px;
+  position: relative;
   width: 100%;
   max-width: 460px;
   margin-inline: auto;
+  height: clamp(348px, 29vw, 398px);
 }
+
+/* Each tile hangs from a floater: the drift lives out here and the angle on
+   the tile itself, so a loop and a hover never fight over the same transform.
+   They overlap on purpose — five pieces that only sit near each other read as
+   spilled, and the same five layered read as a set put down together. */
+.bk-f { position: absolute; }
+.bk-f--mark { left: 0;   top: 9%;  width: 53%; animation: bkFloatA 17s ease-in-out -6s infinite; }
+.bk-f--type { left: 46%; top: 0;   width: 45%; animation: bkFloatB 23s ease-in-out -9s infinite; }
+.bk-f--lock { left: 54%; top: 31%; width: 43%; animation: bkFloatC 19s ease-in-out -4s infinite; }
+.bk-f--pal  { left: 0;   top: 56%; width: 50%; animation: bkFloatD 29s ease-in-out -11s infinite; }
+.bk-f--sig  { left: 51%; top: 57%; width: 46%; animation: bkFloatA 13s ease-in-out -2s infinite; }
 
 /* ---- the shared tile ---- */
 .bk-t {
@@ -2945,8 +2955,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   padding: 14px 16px;
   border-radius: var(--r);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
-  box-shadow: 0 1px 3px rgba(20, 40, 80, .07), 0 12px 28px rgba(20, 40, 80, .10);
-  transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+  box-shadow: 0 14px 34px rgba(20, 40, 80, .16), 0 2px 5px rgba(20, 40, 80, .07);
+  transform: rotate(var(--rot, 0deg));
+  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
 }
 .bk-t::before {
   content: '';
@@ -2960,9 +2971,11 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   transform-origin: left;
   transition: transform .45s var(--ease);
 }
+/* squares up, lifts, and comes to the front of the stack */
 .bk-t:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 1px 3px rgba(20, 40, 80, .08), 0 20px 40px rgba(20, 40, 80, .16);
+  z-index: 9;
+  transform: rotate(0deg) translateY(-6px) scale(1.03);
+  box-shadow: 0 26px 54px rgba(20, 40, 80, .22), 0 2px 5px rgba(20, 40, 80, .08);
 }
 .bk-t:hover::before { transform: scaleX(1); }
 
@@ -2978,8 +2991,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
 /* ---- 1 · the mark, on its measuring ground ---- */
 .bk-mark {
-  grid-column: 1;
-  grid-row: 1 / span 2;
+  --rot: -3deg;
   display: flex;
   flex-direction: column;
   min-block-size: 210px;
@@ -3035,7 +3047,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .bk-mark:hover .bk-mark__guide { inset: -26px; }
 
 /* ---- 2 · the specimen ---- */
-.bk-type { grid-column: 2; grid-row: 1; }
+.bk-type { --rot: 3.5deg; }
 .bk-type__aa {
   display: block;
   margin-top: 2px;
@@ -3051,7 +3063,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .bk-type__name { font-size: 10px; font-weight: 700; color: var(--ink); }
 
 /* ---- 3 · the lock-ups ---- */
-.bk-locks { grid-column: 2; grid-row: 2; }
+.bk-locks { --rot: -2.5deg; }
 .bk-locks__set { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
 .bk-locks__set li {
   position: relative;
@@ -3093,7 +3105,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .bk-locks__set li:hover::before { opacity: 1; }
 
 /* ---- 4 · the palette ---- */
-.bk-pal { grid-column: 1; grid-row: 3; padding-bottom: 16px; }
+.bk-pal { --rot: 2.5deg; padding-bottom: 16px; }
 .bk-pal__set { display: flex; gap: 6px; margin-top: 10px; }
 .bk-pal__set li {
   flex: 1;
@@ -3110,7 +3122,7 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 .bk-pal__set li:hover { flex-grow: 2.2; }
 
 /* ---- 5 · the signature as it gets set ---- */
-.bk-sig { grid-column: 2; grid-row: 3; display: flex; flex-direction: column; }
+.bk-sig { --rot: -4deg; display: flex; flex-direction: column; }
 .bk-sig__edge {
   position: absolute;
   top: 0; bottom: 0; left: 0;
@@ -3150,6 +3162,22 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 /* Five clocks — 13, 11, 23, 13.5 and 17 seconds — so the tiles never come back
    round together, each opening part-way in so the board is already moving when
    the page arrives. */
+@keyframes bkFloatA {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(0, -12px); }
+}
+@keyframes bkFloatB {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-7px, -9px); }
+}
+@keyframes bkFloatC {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(6px, -14px); }
+}
+@keyframes bkFloatD {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-5px, 10px); }
+}
 @keyframes bkDisc {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.055); }
@@ -3175,10 +3203,12 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
 /* The tints, the rings and the widths all still read without the travel. */
 @media (prefers-reduced-motion: reduce) {
+  .bk-f,
   .bk-mark__disc, .bk-mark__guide, .bk-type__aa,
   .bk-locks__set li::after, .bk-pal__set li { animation: none; }
   .bk-t, .bk-locks__set li { transition: none; }
-  .bk-t:hover { transform: none; }
+  /* the angle is the composition, not the motion, so it stays */
+  .bk-t:hover { transform: rotate(var(--rot, 0deg)); }
   .bk-locks__set li:hover { transform: none; }
 }
 
@@ -3637,41 +3667,51 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
            green rule under the cursor, and each has something of its own to
            do underneath. -->
       <div class="bk" aria-hidden="true">
-        <div class="bk-t bk-mark">
-          <p class="bk-label">Mark</p>
-          <div class="bk-mark__stage">
-            <span class="bk-mark__disc">IW<i class="bk-mark__guide"></i></span>
+        <div class="bk-f bk-f--mark">
+          <div class="bk-t bk-mark">
+            <p class="bk-label">Mark</p>
+            <div class="bk-mark__stage">
+              <span class="bk-mark__disc">IW<i class="bk-mark__guide"></i></span>
+            </div>
           </div>
         </div>
 
-        <div class="bk-t bk-type">
-          <p class="bk-label">Typeface</p>
-          <span class="bk-type__aa">Aa</span>
-          <p class="bk-type__name">Plus Jakarta Sans</p>
+        <div class="bk-f bk-f--type">
+          <div class="bk-t bk-type">
+            <p class="bk-label">Typeface</p>
+            <span class="bk-type__aa">Aa</span>
+            <p class="bk-type__name">Plus Jakarta Sans</p>
+          </div>
         </div>
 
-        <div class="bk-t bk-locks">
-          <p class="bk-label">Lock-ups</p>
-          <ul class="bk-locks__set">
-            <li>IW</li><li>IW</li><li>IW</li>
-          </ul>
+        <div class="bk-f bk-f--lock">
+          <div class="bk-t bk-locks">
+            <p class="bk-label">Lock-ups</p>
+            <ul class="bk-locks__set">
+              <li>IW</li><li>IW</li><li>IW</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="bk-t bk-pal">
-          <p class="bk-label">Palette</p>
-          <ul class="bk-pal__set">
-            <li style="--c:#143c66"></li>
-            <li style="--c:#1266b5"></li>
-            <li style="--c:#80c34a"></li>
-            <li style="--c:#5c9a2e"></li>
-          </ul>
+        <div class="bk-f bk-f--pal">
+          <div class="bk-t bk-pal">
+            <p class="bk-label">Palette</p>
+            <ul class="bk-pal__set">
+              <li style="--c:#143c66"></li>
+              <li style="--c:#1266b5"></li>
+              <li style="--c:#80c34a"></li>
+              <li style="--c:#5c9a2e"></li>
+            </ul>
+          </div>
         </div>
 
-        <div class="bk-t bk-sig">
-          <span class="bk-sig__edge"></span>
-          <p class="bk-label">Signature</p>
-          <p class="bk-sig__word"><b>ImageWorks</b><span>Creative</span></p>
-          <span class="bk-sig__rule"></span>
+        <div class="bk-f bk-f--sig">
+          <div class="bk-t bk-sig">
+            <span class="bk-sig__edge"></span>
+            <p class="bk-label">Signature</p>
+            <p class="bk-sig__word"><b>ImageWorks</b><span>Creative</span></p>
+            <span class="bk-sig__rule"></span>
+          </div>
         </div>
       </div>
     </div>
