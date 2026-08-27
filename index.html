@@ -3252,6 +3252,9 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   display: flex;
   flex-direction: column;
   max-width: 820px;
+  /* centred in the band; the copy inside stays ranged left, which is what it
+     needs to be read */
+  margin-inline: auto;
   padding: clamp(26px, 3vw, 38px);
   border-radius: var(--r);
   border-top: 3px solid var(--blue);
