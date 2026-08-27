@@ -2919,49 +2919,58 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
 /* --------------------------------------------------------------------------
    BRAND KIT — the hero visual
-   The source page's flat lay, rebuilt: a stationery card lying at an angle, a
-   swatch strip under it, and the mark sitting over both. Same composition and
-   the same angles; the corners, the surfaces and the shadows come from this
-   page's own system rather than the source's.
+   The source's flat lay taken as a starting point rather than a template: a
+   piece of stationery lying at an angle, colour, and the mark over both. What
+   sits in each of those places is this page's own.
 
-   Each piece floats on its own clock, and each straightens under the cursor —
-   the drift runs on the outer element and the angle on the inner one, so a
-   loop and a hover never fight over the same transform.
+   The card is a letterhead with the wordmark actually set on it instead of
+   grey bars. The colour is a fan of chips rather than a flat strip, the way a
+   deck gets opened out. And the mark carries the dashed clear-space ring the
+   page uses elsewhere, so the biggest object in the hero is the one idea the
+   whole page is about: a mark with a system around it.
+
+   Each piece drifts on its own clock and squares up under the cursor. The
+   drift sits on the outer element and the angle on the inner one, so a loop
+   and a hover never fight over the same transform.
    -------------------------------------------------------------------------- */
-/* Capped at the width the source's own column gave it. The shell here is wider
-   than the source's, and left to fill it the card stretched flat and the three
-   pieces drifted apart into a scatter. */
 .bk {
   position: relative;
   width: 100%;
   max-width: 460px;
   margin-inline: auto;
-  height: clamp(300px, 26vw, 360px);
+  height: clamp(310px, 27vw, 370px);
 }
 
-/* ---- the stationery card ---- */
+/* ---- the letterhead ---- */
 .bk-card {
   position: absolute;
-  top: 14px;
-  left: 6%;
-  width: 68%;
+  top: 6%;
+  left: 0;
+  width: 74%;
   animation: bkCardFloat 17s ease-in-out -6s infinite;
 }
 .bk-card__face {
   position: relative;
   overflow: hidden;
-  padding: 24px 26px;
+  padding: 26px 28px 28px 32px;
   border-radius: var(--r);
   background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
   box-shadow: 0 20px 44px rgba(20, 60, 102, .18);
-  transform: rotate(-5deg);
+  transform: rotate(-6deg);
   transition: transform .45s var(--ease), box-shadow .45s var(--ease);
 }
 .bk-card__face:hover {
   transform: rotate(0deg) scale(1.03);
-  box-shadow: 0 26px 56px rgba(20, 60, 102, .24);
+  box-shadow: 0 28px 58px rgba(20, 60, 102, .24);
 }
-/* light crossing the card, the gesture the hero's own ground makes */
+/* the green edge a printed piece carries down its spine */
+.bk-card__edge {
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  inline-size: 5px;
+  background: var(--green);
+}
+/* light crossing the sheet, the gesture the hero's own ground makes */
 .bk-card__face::after {
   content: '';
   position: absolute;
@@ -2973,119 +2982,178 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
   background-size: 240% 100%;
   animation: bkSheen 19s ease-in-out -4s infinite;
 }
-.bk-dot {
-  display: block;
-  inline-size: 32px;
-  block-size: 32px;
-  margin-bottom: 16px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--green), var(--blue));
-  transition: transform .45s var(--ease);
+.bk-card__word { display: flex; flex-direction: column; gap: 5px; }
+.bk-card__word b {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -.025em;
+  line-height: 1;
+  color: var(--navy);
 }
-.bk-card__face:hover .bk-dot { transform: scale(1.14) rotate(-14deg); }
-.bk-line {
+.bk-card__word span {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--green-ink);
+}
+.bk-rule {
   display: block;
-  block-size: 7px;
-  margin-bottom: 8px;
-  border-radius: 4px;
+  block-size: 1px;
+  margin: 18px 0 14px;
   background: var(--border);
 }
-.bk-line--w60 { inline-size: 60%; }
-.bk-line--w38 { inline-size: 38%; margin-bottom: 0; background: var(--chip-blue); }
-
-/* ---- the swatch strip ---- */
-.bk-swatches {
-  position: absolute;
-  right: 4%;
-  bottom: 22px;
-  animation: bkStripDrift 23s ease-in-out -8s infinite;
-}
-.bk-swatches__strip {
-  display: flex;
-  border-radius: var(--r);
-  overflow: hidden;
-  box-shadow: 0 14px 30px rgba(20, 60, 102, .16);
-  transform: rotate(4deg);
-  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
-}
-.bk-swatches__strip:hover {
-  transform: rotate(0deg);
-  box-shadow: 0 20px 42px rgba(20, 60, 102, .22);
-}
-.bk-swatches__strip li {
+.bk-line {
   display: block;
-  inline-size: 30px;
-  block-size: 74px;
-  transition: inline-size .45s var(--ease);
-  animation: bkSwatchLit 11s ease-in-out infinite;
+  block-size: 6px;
+  margin-bottom: 7px;
+  border-radius: 3px;
+  background: var(--border);
 }
-.bk-swatches__strip li:nth-child(1) { background: var(--navy); }
-.bk-swatches__strip li:nth-child(2) { background: var(--blue); animation-delay: -8.25s; }
-.bk-swatches__strip li:nth-child(3) { background: var(--green); animation-delay: -5.5s; }
-.bk-swatches__strip li:nth-child(4) { background: var(--green-ink); animation-delay: -2.75s; }
-.bk-swatches__strip li:hover { inline-size: 48px; }
+.bk-line--a { inline-size: 66%; }
+.bk-line--b { inline-size: 42%; margin-bottom: 0; background: var(--chip-blue); }
 
-/* ---- the mark ---- */
+/* ---- the colour, opened out like a fan deck ---- */
+.bk-fan {
+  position: absolute;
+  right: 2%;
+  bottom: 3%;
+  animation: bkFanDrift 23s ease-in-out -8s infinite;
+}
+.bk-fan__set { display: flex; align-items: flex-end; }
+.bk-fan__set li {
+  inline-size: 44px;
+  block-size: 62px;
+  border-radius: var(--r);
+  background: var(--c);
+  box-shadow: 0 10px 24px rgba(20, 60, 102, .18);
+  transform-origin: 50% 100%;
+  transition: transform .45s var(--ease), margin .45s var(--ease);
+  animation: bkChipLit 11s ease-in-out infinite;
+}
+.bk-fan__set li + li { margin-left: -14px; }
+.bk-fan__set li:nth-child(1) { transform: rotate(-11deg); }
+.bk-fan__set li:nth-child(2) { transform: rotate(-4deg); animation-delay: -8.25s; }
+.bk-fan__set li:nth-child(3) { transform: rotate(3deg);  animation-delay: -5.5s; }
+.bk-fan__set li:nth-child(4) { transform: rotate(10deg); animation-delay: -2.75s; }
+/* the deck squares up and opens when you reach for it */
+.bk-fan__set:hover li { transform: rotate(0deg); }
+.bk-fan__set:hover li + li { margin-left: 4px; }
+.bk-fan__set li:hover { transform: rotate(0deg) translateY(-8px); }
+
+/* ---- the mark, inside its clear space ---- */
 .bk-mark {
   position: absolute;
-  top: 54%;
-  left: 60%;
+  top: 57%;
+  left: 31%;
   animation: bkMarkPulse 13s ease-in-out -3s infinite;
 }
 .bk-mark__disc {
+  position: relative;
   display: grid;
   place-items: center;
-  inline-size: 84px;
-  block-size: 84px;
+  inline-size: 92px;
+  block-size: 92px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--blue), var(--navy));
-  box-shadow: 0 16px 32px rgba(20, 60, 102, .26);
-  transform: rotate(8deg);
+  box-shadow: 0 16px 34px rgba(20, 60, 102, .28);
+  transform: rotate(-8deg);
   transition: transform .45s var(--ease), box-shadow .45s var(--ease);
 }
 .bk-mark__disc:hover {
-  transform: rotate(0deg) scale(1.08);
-  box-shadow: 0 22px 46px rgba(20, 60, 102, .34);
+  transform: rotate(0deg) scale(1.07);
+  box-shadow: 0 24px 48px rgba(20, 60, 102, .36);
 }
-.bk-mark__disc span {
+/* the rule that says the mark is a system and not just a circle */
+.bk-mark__ring {
+  position: absolute;
+  inset: -13px;
+  border-radius: 50%;
+  border: 1px dashed rgba(18, 102, 181, .42);
+  transition: inset .45s var(--ease), border-color .45s var(--ease);
+}
+.bk-mark__disc:hover .bk-mark__ring { inset: -20px; border-color: rgba(128, 195, 74, .7); }
+.bk-mark__disc b {
   color: #fff;
-  font-size: 20px;
+  font-size: 21px;
   font-weight: 800;
   letter-spacing: .5px;
-  transform: rotate(-8deg);
+  transform: rotate(8deg);
   transition: transform .45s var(--ease);
 }
-.bk-mark__disc:hover span { transform: rotate(0deg); }
+.bk-mark__disc:hover b { transform: rotate(0deg); }
 
-/* Five clocks, none of them a factor of another, so the pieces never come back
-   round together. Each opens part-way in so the kit is already moving when the
-   page arrives rather than sitting still for the first several seconds. */
+/* ---- the specimen chip ---- */
+.bk-tile {
+  position: absolute;
+  top: 2%;
+  right: 9%;
+  animation: bkTileFloat 29s ease-in-out -11s infinite;
+}
+.bk-tile__face {
+  display: grid;
+  place-items: center;
+  inline-size: 66px;
+  block-size: 66px;
+  border-radius: var(--r);
+  background: linear-gradient(180deg, var(--card-top), var(--card-bottom));
+  box-shadow: 0 12px 26px rgba(20, 60, 102, .16);
+  transform: rotate(8deg);
+  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
+}
+.bk-tile__face:hover {
+  transform: rotate(0deg) scale(1.08);
+  box-shadow: 0 18px 36px rgba(20, 60, 102, .22);
+}
+.bk-tile__face span {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -.04em;
+  color: var(--navy);
+  animation: bkTileWeight 23s ease-in-out -7s infinite;
+}
+
+/* Six clocks — 17, 19, 23, 13, 11 and 29 seconds — none a factor of another,
+   so the pieces never come back round together. Each opens part-way in so the
+   kit is already moving when the page arrives. */
 @keyframes bkCardFloat {
   0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-10px); }
+  50%      { transform: translateY(-11px); }
 }
-@keyframes bkStripDrift {
+@keyframes bkFanDrift {
   0%, 100% { transform: translate(0, 0); }
-  50%      { transform: translate(-7px, -9px); }
+  50%      { transform: translate(-8px, -10px); }
 }
 @keyframes bkMarkPulse {
   0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50%      { transform: translate(-50%, -50%) scale(1.06); }
+  50%      { transform: translate(-50%, -50%) scale(1.055); }
+}
+@keyframes bkTileFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-13px); }
 }
 @keyframes bkSheen {
   0%, 100% { background-position: 132% 0; }
   50%      { background-position: -32% 0; }
 }
-@keyframes bkSwatchLit {
-  0%, 6%    { filter: brightness(1.22); }
+@keyframes bkChipLit {
+  0%, 6%    { filter: brightness(1.2); }
   20%, 100% { filter: brightness(1); }
+}
+/* Plus Jakarta Sans is one variable face, so the specimen can run its axis. */
+@keyframes bkTileWeight {
+  0%, 7%    { font-weight: 300; }
+  43%, 57%  { font-weight: 800; }
+  93%, 100% { font-weight: 300; }
 }
 
 /* The angles, the shadows and the widths all still read without the travel. */
 @media (prefers-reduced-motion: reduce) {
-  .bk-card, .bk-swatches, .bk-mark,
+  .bk-card, .bk-fan, .bk-mark, .bk-tile,
   .bk-card__face::after,
-  .bk-swatches__strip li { animation: none; }
+  .bk-fan__set li,
+  .bk-tile__face span { animation: none; }
   .bk-mark { transform: translate(-50%, -50%); }
 }
 
@@ -3104,11 +3172,11 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
 
 @media (max-width: 900px) {
   .bd-hero { grid-template-columns: 1fr; }
-  /* In a narrower frame the three pieces keep their sizes and start to collide,
-     so the mark steps left and up off the swatch strip. */
-  .bk { height: 290px; }
-  .bk-mark { top: 48%; left: 44%; }
-  .bk-swatches { bottom: 14px; }
+  /* In a narrower frame the pieces keep their sizes and start to collide, so
+     the mark steps left off the fan and the specimen tucks in. */
+  .bk { height: 300px; }
+  .bk-mark { top: 54%; left: 26%; }
+  .bk-tile { right: 0; }
 }
 
 /* --------------------------------------------------------------------------
@@ -3122,6 +3190,11 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
    already uses, .24s apart, the first time the section is read. It is the one
    place the copy enumerates anything.
    -------------------------------------------------------------------------- */
+/* The hero leaves its own space underneath, so a full band's padding on top of
+   that put close to 200px between the buttons and the card. The band keeps its
+   full measure at the foot, where the next section starts cold. */
+.band--lift { padding-block-start: clamp(36px, 4.4vw, 60px); }
+
 .bd-answer { display: block; }
 
 .bd-answer__card {
@@ -3545,27 +3618,39 @@ html:not([data-anim="on"]) .hl { background-size: 100% .34em; }
       <div class="bk" aria-hidden="true">
         <div class="bk-card">
           <div class="bk-card__face">
-            <span class="bk-dot"></span>
-            <span class="bk-line bk-line--w60"></span>
-            <span class="bk-line bk-line--w38"></span>
+            <span class="bk-card__edge"></span>
+            <p class="bk-card__word"><b>ImageWorks</b><span>Creative</span></p>
+            <span class="bk-rule"></span>
+            <span class="bk-line bk-line--a"></span>
+            <span class="bk-line bk-line--b"></span>
           </div>
         </div>
 
-        <div class="bk-swatches">
-          <ul class="bk-swatches__strip">
-            <li></li><li></li><li></li><li></li>
+        <div class="bk-tile">
+          <div class="bk-tile__face"><span>Aa</span></div>
+        </div>
+
+        <div class="bk-fan">
+          <ul class="bk-fan__set">
+            <li style="--c:#143c66"></li>
+            <li style="--c:#1266b5"></li>
+            <li style="--c:#80c34a"></li>
+            <li style="--c:#5c9a2e"></li>
           </ul>
         </div>
 
         <div class="bk-mark">
-          <div class="bk-mark__disc"><span>IW</span></div>
+          <div class="bk-mark__disc">
+            <span class="bk-mark__ring"></span>
+            <b>IW</b>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- 2 · AI OVERVIEW / AEO ANSWER --------------------------------------- -->
-  <section class="band band--tint" aria-labelledby="what-is-branding">
+  <section class="band band--tint band--lift" aria-labelledby="what-is-branding">
     <div class="wrap bd-answer reveal">
       <!-- The question, its answer and the qualification are one object, so
            they sit in one card — with the qualification held at its foot under
